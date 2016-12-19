@@ -8,7 +8,7 @@ sudo apt-get update
 sudo apt-get upgrade -y
 
 # Add extras not included w/scotchbox.
-sudo apt-get install subversion openjdk-7-jre-headless dnsmasq php5-xdebug pkg-config cmake php-codesniffer phpunit libssh2-1-dev libssh2-php -y
+sudo apt-get install subversion openjdk-7-jre-headless nfs-common nfs-kernel-server dnsmasq php5-xdebug pkg-config cmake php-codesniffer phpunit libssh2-1-dev libssh2-php drush vsftpd -y --force-yes
 sudo service apache2 restart
 
 # Install PHP Compatibility standard for codesniffer if not already present.
@@ -88,4 +88,9 @@ done
 
 echo "Added and enabled vhosts. Restarting Apache..."
 sudo service apache2 restart
-
+echo "Added and enabled VSFTPD. Restarting VSFTPD..."
+sudo apt-get install vsftpd
+sudo wget https://gist.github.com/anonymous/1204611 /etc/vsftpd.conf
+sudo service vsftpd restart
+echo "Modify MySQL so we can view shared MySQL data folder. Restart MySQL.."
+sudo sed -i '47 s/^/#/' /etc/mysql/my.conf

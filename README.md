@@ -1,12 +1,21 @@
-# sites-box
+# sites-box 2
 
 An extension of the [Scotch Box](https://box.scotch.io/) Vagrant lamp stack configured for hosting multiple sites in one box.
 
+Includes:
+
+* MySQL data directory is external in order to stop it being destroyed when Vagrant destroyed
+* Simplified MySQL access - it's now seen as local instead of the standard SSH connection
+* FTP access using VSFTP
+* Composer updates to latest version
+* Mailcatcher loads on boot
+* DNSMasq detection for Windows hosts
+
 Setup requires:
 
-* OS-X
 * VirtualBox ([binaries available here](https://www.virtualbox.org/wiki/Downloads))
 * Vagrant ([binaries available here](http://www.vagrantup.com/downloads.html))
+* OS-X (for DNS Masq)
 * XCode (and it's developer tools)
 * Homebrew
 
@@ -42,7 +51,7 @@ These are some notes that might be helpful after you've done the setup. But you 
 
 Most of the setup is to get dnsmasq setup on your host machine. It's not strictly necessary, but it'll allow you to use wildcard domains on your sites, which is nice for WordPress multisite and similar projects.
 
-### Setup dnsmasq
+### Setup dnsmasq (Mac only)
 
 * Install dnsmasq via Homebrew: `brew install dnsmasq`
 * Run the following commands to setup dnsmasq:
@@ -76,9 +85,11 @@ Most of the setup is to get dnsmasq setup on your host machine. It's not strictl
 ### Setup the virtual machine
 
 * Use a terminal to `cd` into the root of this project.
-* Install the hostmanager Vagrant plugin with `vagrant plugin install vagrant-hostmanager`
+* Install the Hostmanager Vagrant plugin with `vagrant plugin install vagrant-hostmanager`
+* Install Vagrant Guest Updates: `vagrant plugin install vagrant-vbguest`
 * Make a copy of `config.example.yaml` and rename it `config.yaml`
 * Customize `config.yaml` as needed (it's well-commented).
+* If using Sites Box on Windows, remember to 
 * Start your virtual machine with `vagrant up`
 
 After that, you can visit your (empty) sites in a browser. If you defined a site called `site1` and assigned the hostname `dev1` to your machine, you'll should see it at `http://site1.dev1`. The sites themselves will have directories generated into the `/sites` directory of this project.

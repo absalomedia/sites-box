@@ -5,11 +5,34 @@ require "yaml"
 
 CONF = YAML.load(File.open(File.join(File.dirname(__FILE__), "config.yaml"), File::RDONLY).read)
 
+module OS
+	def OS.windows?
+		(/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+	end
+
+	def OS.mac?
+		(/darwin/ =~ RUBY_PLATFORM) != nil
+	end
+
+	def OS.unix?
+		!OS.windows?
+	end
+
+	def OS.linux?
+		OS.unix? and not OS.mac?
+	end
+end
+
 Vagrant.configure("2") do |config|
 
     config.vm.hostname = CONF['vm_hostname']
     config.hostmanager.aliases = Array.new
 
+    config.vbguest.auto_update = true
+
+     # do NOT download the iso file from a webserver
+    config.vbguest.no_remote = false   
+    
     config.ssh.username = CONF['ssh_username'] || "vagrant"
     config.ssh.password = CONF['ssh_password'] || "vagrant"
 
@@ -29,10 +52,18 @@ Vagrant.configure("2") do |config|
 
     config.vm.box = "scotch/box"
     config.vm.network "private_network", ip: CONF['vm_ip']
+    config.vm.network :forwarded_port, guest: 3306, host: 3306
+    
     config.vm.synced_folder "sites/", "/var/www/vhosts", :nfs => { :mount_options => ["dmode=777","fmode=666"] }
+    config.vm.synced_folder "../data/", "/var/lib/mysql/", id: "mysql", owner: "mysql", group: "mysql", mount_options: ["dmode=775,fmode=664"]
+    
     config.hostmanager.enabled = true
-    config.hostmanager.manage_host = true
-
+    if (defined?(OS.windows)).nil?
+        config.hostmanager.manage_host = false
+	else
+        config.hostmanager.manage_host = true
+    end
+    
     # Format the domains as a comma-separated list
     # to pass into the shell script.
     vhosts = '"' + config.hostmanager.aliases.join(",") + '"';
@@ -46,5 +77,7 @@ Vagrant.configure("2") do |config|
     # host machine sleeps or is halted and started back up.
     # @TODO Isolate and address the underlying problem here.
     config.vm.provision "shell", inline: "sudo service apache2 restart", run: "always"
-
+    config.vm.provision "shell", inline: "/home/vagrant/.rbenv/shims/mailcatcher --http-ip=0.0.0.0", run: "always"
+    config.vm.provision "shell", inline: "sudo composer self-update", run: "always"
+    
 end
