@@ -4,12 +4,15 @@ An extension of the [Scotch Box](https://box.scotch.io/) Vagrant lamp stack conf
 
 Includes:
 
-* MySQL data directory is external in order to stop it being destroyed when Vagrant destroyed
-* Simplified MySQL access - it's now seen as local instead of the standard SSH connection
 * FTP access using VSFTP
 * Composer updates to latest version
 * Mailcatcher loads on boot
 * DNSMasq detection for Windows hosts
+* Apache virtual host directory now customised in config.yaml file
+* MySQL data directory is now a synced folder to stop you losing data on when Vagrant image is destroyed
+* MySQL synced folder now customised in config.yaml file
+* Simplified MySQL access - it's now seen as local instead of the standard SSH connection
+
 
 Setup requires:
 

@@ -54,8 +54,8 @@ Vagrant.configure("2") do |config|
     config.vm.network "private_network", ip: CONF['vm_ip']
     config.vm.network :forwarded_port, guest: 3306, host: 3306
     
-    config.vm.synced_folder "sites/", "/var/www/vhosts", :nfs => { :mount_options => ["dmode=777","fmode=666"] }
-    config.vm.synced_folder "../data/", "/var/lib/mysql/", id: "mysql", owner: "mysql", group: "mysql", mount_options: ["dmode=775,fmode=664"]
+    config.vm.synced_folder CONF['vm_code'], "/var/www/vhosts", :nfs => { :mount_options => ["dmode=777","fmode=666"] }
+    config.vm.synced_folder CONF['vm_data'], "/var/lib/mysql/", id: "mysql", owner: "mysql", group: "mysql", mount_options: ["dmode=775,fmode=664"]
     
     config.hostmanager.enabled = true
     if (defined?(OS.windows)).nil?
