@@ -93,4 +93,4 @@ sudo apt-get install vsftpd
 sudo wget https://gist.github.com/anonymous/1204611 /etc/vsftpd.conf
 sudo service vsftpd restart
 echo "Modify MySQL so we can view shared MySQL data folder. Restart MySQL.."
-sudo sed -i '47 s/^/#/' /etc/mysql/my.conf
+sudo sed -i '47 s/^/#/' /etc/mysql/my.cnf
