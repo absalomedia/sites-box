@@ -3,12 +3,22 @@
 # Print text when running vagrant up.
 echo "Starting VM..."
 
+# Drop in MariaDB && HHVM
+sudo apt-get install software-properties-common
+sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
+sudo add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mirror.aarnet.edu.au/pub/MariaDB/repo/10.1/ubuntu trusty main'
+sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
+sudo add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
+
+
 # Keep packages up to date.
 sudo apt-get update
 sudo apt-get upgrade -y
 
 # Add extras not included w/scotchbox.
-sudo apt-get install subversion openjdk-7-jre-headless nfs-common nfs-kernel-server dnsmasq php5-xdebug pkg-config cmake php-codesniffer phpunit libssh2-1-dev libssh2-php drush vsftpd -y --force-yes
+sudo apt-get install subversion openjdk-7-jre-headless nfs-common nfs-kernel-server dnsmasq pkg-config cmake php-codesniffer phpunit libssh2-1-dev libssh2-php drush vsftpd -y --force-yes
+sudo apt-get install mariadb-server hhvm -y --force-yes
+sudo /usr/share/hhvm/install_fastcgi.sh
 sudo service apache2 restart
 
 # Install PHP Compatibility standard for codesniffer if not already present.
