@@ -3,13 +3,13 @@
 # Print text when running vagrant up.
 echo "Starting VM..."
 
-# Drop in MariaDB && HHVM
+# Drop in MariaDB && HHVM & PHP7.1
 sudo apt-get install software-properties-common
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
 sudo add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mirror.aarnet.edu.au/pub/MariaDB/repo/10.1/ubuntu trusty main'
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
 sudo add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
-
+sudo add-apt-repository ppa:ondrej/php
 
 # Keep packages up to date.
 sudo apt-get update
@@ -17,19 +17,13 @@ sudo apt-get upgrade -y
 
 # Add extras not included w/scotchbox.
 sudo apt-get install subversion openjdk-7-jre-headless nfs-common nfs-kernel-server dnsmasq pkg-config cmake php-codesniffer phpunit libssh2-1-dev libssh2-php drush vsftpd -y --force-yes
+
+sudo sudo apt-get install php7.1 php7.1-common php7.1-mysql php7.1-pgsql php7.1-sqlite3 php7.1-mongo libapache2-mod-php7.1 php7.1-mcrypt php7.1-curl php7.1-gd php7.1-apc php7.1-xml
+
 sudo apt-get install mariadb-server hhvm -y --force-yes
 sudo /usr/share/hhvm/install_fastcgi.sh
 sudo service apache2 restart
 
-# Install PHP Compatibility standard for codesniffer if not already present.
-if [ ! -d '/usr/share/php/PHP/CodeSniffer/Standards/PHPCompatibility-5.6' ]; then
-  cd /usr/share/php/PHP/CodeSniffer/Standards/
-  sudo mkdir PHPCompatibility-5.6
-  sudo curl -Lo PHPCompatibility.zip https://github.com/wimg/PHPCompatibility/archive/5.6.zip
-  sudo unzip PHPCompatibility.zip
-  sudo rm PHPCompatibility.zip
-  cd ~
-fi
 
 # Install Codeception if it isn't already here.
 if ! type codecept > /dev/null; then
