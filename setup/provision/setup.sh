@@ -23,6 +23,7 @@ sudo sudo apt-get install php7.1 php7.1-common php7.1-mysql php7.1-pgsql php7.1-
 sudo apt-get install mariadb-server hhvm -y --force-yes
 sudo /usr/share/hhvm/install_fastcgi.sh
 sudo service apache2 restart
+sudo service mysql restart
 
 
 # Install Codeception if it isn't already here.
@@ -98,3 +99,4 @@ sudo wget https://gist.github.com/anonymous/1204611 /etc/vsftpd.conf
 sudo service vsftpd restart
 echo "Modify MySQL so we can view shared MySQL data folder. Restart MySQL.."
 sudo sed -i '47 s/^/#/' /etc/mysql/my.cnf
+sudo service mysql restart
