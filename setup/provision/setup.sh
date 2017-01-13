@@ -13,12 +13,12 @@ sudo add-apt-repository ppa:ondrej/php
 
 # Keep packages up to date.
 sudo apt-get update
-sudo apt-get upgrade -y
+sudo apt-get upgrade -y --force-yes
 
 # Add extras not included w/scotchbox.
 sudo apt-get install subversion openjdk-7-jre-headless nfs-common nfs-kernel-server dnsmasq pkg-config cmake php-codesniffer phpunit libssh2-1-dev libssh2-php drush vsftpd -y --force-yes
 
-sudo sudo apt-get install php7.1 php7.1-common php7.1-mysql php7.1-pgsql php7.1-sqlite3 php7.1-mongo libapache2-mod-php7.1 php7.1-mcrypt php7.1-curl php7.1-gd php7.1-apc php7.1-xml
+sudo sudo apt-get install php7.1 php7.1-common php7.1-mysql php7.1-pgsql php7.1-sqlite3 php7.1-mongo libapache2-mod-php7.1 php7.1-mcrypt php7.1-curl php7.1-gd php7.1-apc php7.1-xml  -y --force-yes
 
 sudo apt-get install mariadb-server hhvm -y --force-yes
 sudo /usr/share/hhvm/install_fastcgi.sh
