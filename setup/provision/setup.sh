@@ -25,6 +25,8 @@ sudo /usr/share/hhvm/install_fastcgi.sh
 sudo service apache2 restart
 sudo service mysql restart
 
+# Add in MeteorJS
+sudo curl -k https://install.meteor.com/ | sh
 
 # Install Codeception if it isn't already here.
 if ! type codecept > /dev/null; then
