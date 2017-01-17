@@ -11,6 +11,10 @@ sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e72
 sudo add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
 sudo add-apt-repository ppa:ondrej/php
 
+# Remove PHP5.6 repo in prep for 7.1
+sudo rm /etc/apt/sources.list.d/ondrej-php5-5*
+sudo apt-get purge 'php5*'
+
 # Keep packages up to date.
 sudo apt-get update
 sudo apt-get upgrade -y --force-yes
@@ -18,10 +22,10 @@ sudo apt-get upgrade -y --force-yes
 # Add extras not included w/scotchbox.
 sudo apt-get install subversion openjdk-7-jre-headless nfs-common nfs-kernel-server dnsmasq pkg-config cmake php-codesniffer phpunit libssh2-1-dev libssh2-php drush vsftpd -y --force-yes
 
-sudo sudo apt-get install php7.1 php7.1-common php7.1-mysql php7.1-pgsql php7.1-sqlite3 php7.1-mongo libapache2-mod-php7.1 php7.1-mcrypt php7.1-curl php7.1-gd php7.1-apc php7.1-xml  -y --force-yes
+sudo sudo apt-get install php7.1 php7.1-common php7.1-mysql php7.1-fpm php7.1-pgsql php7.1-sqlite3 php7.1-mongo libapache2-mod-php7.1 php7.1-intl php7.1-tidy php7.1-readline php7.1-xdebug php7.1-ssh2 php7.1-json php7.1-mcrypt php7.1-curl php7.1-gd php7.1-apc php7.1-xml php7.1-imagick php-xhprof php-mongo php-libsodium blackfire-php -y --force-yes
 
-sudo apt-get install mariadb-server hhvm -y --force-yes
-sudo /usr/share/hhvm/install_fastcgi.sh
+sudo apt-get install mariadb-server mariadb-client hhvm -y --force-yes
+# sudo /usr/share/hhvm/install_fastcgi.sh
 sudo service apache2 restart
 sudo service mysql restart
 
