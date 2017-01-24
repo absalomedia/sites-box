@@ -58,11 +58,7 @@ Vagrant.configure("2") do |config|
     config.vm.synced_folder CONF['vm_data'], "/var/lib/mysql/", id: "mysql", owner: "mysql", group: "mysql", mount_options: ["dmode=775,fmode=664"]
     
     config.hostmanager.enabled = true
-    if (defined?(OS.windows)).nil?
-        config.hostmanager.manage_host = false
-	else
-        config.hostmanager.manage_host = true
-    end
+    config.hostmanager.manage_host = true
     
     # Format the domains as a comma-separated list
     # to pass into the shell script.
