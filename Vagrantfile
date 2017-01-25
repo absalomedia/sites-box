@@ -73,7 +73,7 @@ Vagrant.configure("2") do |config|
     # host machine sleeps or is halted and started back up.
     # @TODO Isolate and address the underlying problem here.
     config.vm.provision "shell", inline: "sudo service apache2 restart", run: "always"
+    config.vm.provision "shell", inline: "sudo service mysql restart", run: "always"    
     config.vm.provision "shell", inline: "/home/vagrant/.rbenv/shims/mailcatcher --http-ip=0.0.0.0", run: "always"
     config.vm.provision "shell", inline: "sudo composer self-update", run: "always"
-    
 end
