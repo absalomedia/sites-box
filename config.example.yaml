@@ -5,6 +5,9 @@ vm_ip: 192.168.33.10
 # A local TLD that will be assigned to the VM, such as "dev" or "xyz".
 vm_hostname: dev1
 
+vm_code: ../code/
+vm_data: ../data/
+
 ssh_username: vagrant
 ssh_password: vagrant
 
