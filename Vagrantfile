@@ -5,24 +5,6 @@ require "yaml"
 
 CONF = YAML.load(File.open(File.join(File.dirname(__FILE__), "config.yaml"), File::RDONLY).read)
 
-module OS
-	def OS.windows?
-		(/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
-	end
-
-	def OS.mac?
-		(/darwin/ =~ RUBY_PLATFORM) != nil
-	end
-
-	def OS.unix?
-		!OS.windows?
-	end
-
-	def OS.linux?
-		OS.unix? and not OS.mac?
-	end
-end
-
 Vagrant.configure("2") do |config|
 
     config.vm.hostname = CONF['vm_hostname']
@@ -58,8 +40,13 @@ Vagrant.configure("2") do |config|
     config.vm.synced_folder CONF['vm_data'], "/var/lib/mysql/", id: "mysql", owner: "mysql", group: "mysql", mount_options: ["dmode=775,fmode=664"]
     
     config.hostmanager.enabled = true
-    config.hostmanager.manage_host = true
-    
+
+    if Vagrant::Util::Platform.windows? then
+        config.hostmanager.manage_host = false
+    else
+        config.hostmanager.manage_host = true
+    end
+        
     # Format the domains as a comma-separated list
     # to pass into the shell script.
     vhosts = '"' + config.hostmanager.aliases.join(",") + '"';
