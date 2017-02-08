@@ -2,11 +2,10 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
+phpversion="$(php --version | tail -r | tail -n 1 | cut -d " " -f 2 | cut -c 1,1)"
+
 # Print text when running vagrant up.
 echo "Starting VM..."
-
-sudo a2dismod php5
-sudo apt-get purge 'php5.6*'
 
 # Drop in MariaDB && HHVM & PHP7.1
 sudo apt-get install software-properties-common
@@ -17,29 +16,38 @@ sudo add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
 sudo add-apt-repository ppa:ondrej/php
 sudo add-apt-repository ppa:ondrej/apache2
 
-# Remove PHP5.6 repo in prep for 7.1
-sudo rm /etc/apt/sources.list.d/ondrej-php5-5*
-
 # Keep packages up to date.
 sudo apt-get update
 sudo apt-get upgrade -y --force-yes
+sudo apt-get dist-upgrade -y --force-yes
 # Update Apache to latest edition
 sudo apt-get upgrade apache2 -y --force-yes
+
+if [ $(echo " $phpversion > 7" | bc) -eq 1 ]; then
+    sudo a2dismod php5
+    sudo apt-get purge 'php5.6*'
+    # Remove PHP5.6 repo in prep for 7.1
+    sudo rm /etc/apt/sources.list.d/ondrej-php5-5*
+
+    sudo apt-get install php7.1 php7.1-cli php7.1-common php7.1-mysql php7.1-fpm php7.1-pgsql php7.1-sqlite3 php7.1-mongo libapache2-mod-php7.1 php7.1-redis php7.1-intl php7.1-tidy php7.1-readline php7.1-xdebug php7.1-ssh2 php7.1-json php7.1-mcrypt php7.1-curl php7.1-gd php-uploadprogress php7.1-apc php7.1-xml php7.1-mbstring php7.1-imagick php-xhprof php-mongo php-libsodium blackfire-php -y --force-yes
+
+    sudo a2enmod php7.1
+    sudo a2enmod http2
+fi
 
 # Add extras not included w/scotchbox.
 sudo apt-get install subversion openjdk-7-jre-headless nfs-common nfs-kernel-server dnsmasq pkg-config cmake php-codesniffer phpunit libssh2-1-dev libssh2-php drush vsftpd -y --force-yes
 
-sudo apt-get install php7.1 php7.1-cli php7.1-common php7.1-mysql php7.1-fpm php7.1-pgsql php7.1-sqlite3 php7.1-mongo libapache2-mod-php7.1 php7.1-redis php7.1-intl php7.1-tidy php7.1-readline php7.1-xdebug php7.1-ssh2 php7.1-json php7.1-mcrypt php7.1-curl php7.1-gd php-uploadprogress php7.1-apc php7.1-xml php7.1-mbstring php7.1-imagick php-xhprof php-mongo php-libsodium blackfire-php -y --force-yes
-
-sudo a2enmod php7.1
-sudo a2enmod http2
 sudo apt-get install mariadb-server mariadb-client hhvm -y --force-yes
 # sudo /usr/share/hhvm/install_fastcgi.sh
 sudo service apache2 restart
 sudo service mysql restart
 
 # Add in MeteorJS
-sudo curl -k https://install.meteor.com/ | sh
+if ! type meteor > /dev/null; then
+    sudo curl -k https://install.meteor.com/ | sh
+    sudo npm install -g reaction-cli
+fi
 
 # Install Codeception if it isn't already here.
 if ! type codecept > /dev/null; then

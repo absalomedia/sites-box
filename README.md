@@ -4,11 +4,14 @@ An extension of the [Scotch Box](https://box.scotch.io/) Vagrant lamp stack conf
 
 Includes:
 
+* Kernel distribution update
+* Scotch Box PHP5.x edition will update to PHP 7.1
 * FTP access using VSFTP
 * Composer updates to latest version
 * Mailcatcher loads on boot
 * DNSMasq detection for Windows hosts
 * Latest edition of [MeteorJS](https://www.meteor.com) installed
+* Latest edition of [Reaction Commerce](https://reactioncommerce.com/) installed
 * [Sodium](https://download.libsodium.org/doc/) crypto library & XDebug for PHP
 * Apache virtual host directory now customised in config.yaml file
 * MySQL data directory is now a synced folder to stop you losing data on when Vagrant image is destroyed

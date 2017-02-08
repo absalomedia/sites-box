@@ -60,7 +60,6 @@ Vagrant.configure("2") do |config|
     # This is a temporary hack to address sites not loading after the
     # host machine sleeps or is halted and started back up.
     # @TODO Isolate and address the underlying problem here.
-    config.vm.provision "shell", inline: "setup/provision/maria.sh", run: "always"
     config.vm.provision "shell", inline: "sudo service apache2 restart", run: "always"
     config.vm.provision "shell", inline: "sudo service mysql restart", run: "always"    
     config.vm.provision "shell", inline: "/home/vagrant/.rbenv/shims/mailcatcher --http-ip=0.0.0.0", run: "always"
