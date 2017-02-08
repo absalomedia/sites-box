@@ -7,6 +7,7 @@ Includes:
 * Kernel distribution update
 * Scotch Box PHP5.x edition will update to PHP 7.1
 * FTP access using VSFTP
+* Drush
 * Composer updates to latest version
 * Mailcatcher loads on boot
 * DNSMasq detection for Windows hosts

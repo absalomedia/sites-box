@@ -7,14 +7,16 @@ phpversion="$(php --version | tail -r | tail -n 1 | cut -d " " -f 2 | cut -c 1,1
 # Print text when running vagrant up.
 echo "Starting VM..."
 
-# Drop in MariaDB && HHVM & PHP7.1
-sudo apt-get install software-properties-common
-sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
-sudo add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mirror.aarnet.edu.au/pub/MariaDB/repo/10.1/ubuntu trusty main'
-sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
-sudo add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
-sudo add-apt-repository ppa:ondrej/php
-sudo add-apt-repository ppa:ondrej/apache2
+if [ $(echo " $phpversion > 7" | bc) -eq 1 ]; then
+    # Drop in MariaDB && HHVM & PHP7.1 
+    sudo apt-get install software-properties-common
+    sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
+    sudo add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mirror.aarnet.edu.au/pub/MariaDB/repo/10.1/ubuntu trusty main'
+    sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
+    sudo add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
+    sudo add-apt-repository ppa:ondrej/php
+    sudo add-apt-repository ppa:ondrej/apache2
+fi
 
 # Keep packages up to date.
 sudo apt-get update
