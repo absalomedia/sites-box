@@ -32,7 +32,7 @@ if [ $(echo " $phpversion > 7" | bc) -eq 1 ]; then
     # Remove PHP5.6 repo in prep for 7.1
     sudo rm /etc/apt/sources.list.d/ondrej-php5-5*
 
-    sudo apt-get install php7.1 php7.1-cli php7.1-common php7.1-mysql php7.1-fpm php7.1-pgsql php7.1-sqlite3 php7.1-mongo libapache2-mod-php7.1 php7.1-redis php7.1-intl php7.1-tidy php7.1-readline php7.1-xdebug php7.1-ssh2 php7.1-json php7.1-mcrypt php7.1-curl php7.1-gd php-uploadprogress php7.1-apc php7.1-xml php7.1-mbstring php7.1-imagick php-xhprof php-memcache php-memcached php-mongo php-libsodium blackfire-php sendmail-y --force-yes
+    sudo apt-get install php7.1 php7.1-cli php7.1-common php7.1-mysql php7.1-fpm php7.1-pgsql php7.1-sqlite3 php7.1-mongo libapache2-mod-php7.1 php7.1-redis php7.1-intl php7.1-tidy php7.1-readline php7.1-xdebug php7.1-ssh2 php7.1-json php7.1-mcrypt php7.1-curl php7.1-gd php-uploadprogress php7.1-apc php7.1-xml php7.1-mbstring php7.1-imagick php-xhprof php-memcache php-memcached php-mongo php-libsodium blackfire-php sendmail locate -y --force-yes
 
     sudo cp /etc/php5/mods-available/mailcatcher.ini /etc/php/7.1/mods-available/mailcatcher.ini
     sudo cp /etc/php5/mods-available/memcache.ini /etc/php/7.1/mods-available/memcache.ini
