@@ -123,7 +123,12 @@ VIRTUALHOSTCONF
 
 done
 
-echo "Added and enabled vhosts. Restarting Apache..."
+
+echo "Added and enabled vhosts. Updating PHP limits. Restarting Apache..."
+sudo sed -ie 's/ 2M/ 24M/g' /etc/php/7.1/apache2/php.ini
+sudo sed -ie 's/ 8M/ 24M/g' /etc/php/7.1/apache2/php.ini
+sudo sed -ie 's/ 2M/ 24M/g' /etc/php/7.1/cli/php.ini
+sudo sed -ie 's/ 8M/ 24M/g' /etc/php/7.1/cli/php.ini
 sudo service apache2 restart
 echo "Added and enabled VSFTPD. Restarting VSFTPD..."
 sudo apt-get install vsftpd
