@@ -15,6 +15,7 @@ Includes:
 * Latest edition of [Reaction Commerce](https://reactioncommerce.com/) installed
 * [Sodium](https://download.libsodium.org/doc/) crypto library & XDebug for PHP
 * Apache virtual host directory now customised in config.yaml file
+* MariaDB upgrade from standard MySQL & custom configuration with UFT8 encoded database setup
 * MySQL data directory is now a synced folder to stop you losing data on when Vagrant image is destroyed
 * MySQL synced folder now customised in config.yaml file
 * Simplified MySQL access - it's now seen as local instead of the standard SSH connection
@@ -98,7 +99,7 @@ Most of the setup is to get dnsmasq setup on your host machine. It's not strictl
 * Install Vagrant Guest Updates: `vagrant plugin install vagrant-vbguest`
 * Make a copy of `config.example.yaml` and rename it `config.yaml`
 * Customize `config.yaml` as needed (it's well-commented).
-* If using Sites Box on Windows, remember to 
+* If using Sites Box on Windows, remember to modify your %SystemRoot%\System32\drivers\etc\hosts files with site list you created
 * Start your virtual machine with `vagrant up`
 
 After that, you can visit your (empty) sites in a browser. If you defined a site called `site1` and assigned the hostname `dev1` to your machine, you'll should see it at `http://site1.dev1`. The sites themselves will have directories generated into the `/sites` directory of this project.
