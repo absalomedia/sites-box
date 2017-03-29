@@ -90,7 +90,8 @@ Most of the setup is to get dnsmasq setup on your host machine. It's not strictl
   # to restart dnsmasq:
   sudo launchctl stop homebrew.mxcl.dnsmasq
   sudo launchctl start homebrew.mxcl.dnsmasq
- ```
+  ```
+
 
 ### Setup the virtual machine
 
