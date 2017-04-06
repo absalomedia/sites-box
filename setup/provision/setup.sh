@@ -72,14 +72,6 @@ if ! type rvm > /dev/null; then
   source /home/vagrant/.rvm/scripts/rvm
 fi
 
-#Better drush
-sudo apt-get remove drush
-sudo git clone https://github.com/drush-ops/drush.git /usr/local/src/drush
-cd /usr/local/src/drush
-sudo git checkout 7.4.0  #or whatever version you want.
-sudo ln -s /usr/local/src/drush/drush /usr/bin/drush
-sudo composer install
-
 # Gems - update, install some not included w/scotchbox, RVM.
 gem update
 gem install compass net-sftp net-ssh
@@ -91,6 +83,14 @@ export PATH="~/.composer/vendor/bin:$PATH"
 # Setup dnsmasq for VM.
 echo -e "address=/$3/$2" | sudo tee /etc/dnsmasq.d/$3
 sudo /etc/init.d/dnsmasq restart
+
+#Better drush
+sudo apt-get remove drush
+sudo git clone https://github.com/drush-ops/drush.git /usr/local/src/drush
+cd /usr/local/src/drush
+sudo git checkout 7.4.0  #or whatever version you want.
+sudo ln -s /usr/local/src/drush/drush /usr/bin/drush
+sudo composer install
 
 # Setup the files for level vhost (nothing to be shown there ATM).
 # @TODO Get the ScotchBox index.php to serve from there.
