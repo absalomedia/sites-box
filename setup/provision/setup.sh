@@ -45,7 +45,7 @@ if [ $(echo " $phpversion > 7" | bc) -eq 1 ]; then
 fi
 
 # Add extras not included w/scotchbox.
-sudo apt-get install subversion openjdk-7-jre-headless nfs-common nfs-kernel-server dnsmasq pkg-config cmake php-codesniffer phpunit libssh2-1-dev libssh2-php drush vsftpd -y --force-yes
+sudo apt-get install subversion openjdk-7-jre-headless nfs-common nfs-kernel-server dnsmasq pkg-config cmake php-codesniffer phpunit libssh2-1-dev libssh2-php vsftpd -y --force-yes
 
 sudo apt-get install mariadb-server mariadb-client hhvm -y --force-yes
 # sudo /usr/share/hhvm/install_fastcgi.sh
@@ -71,6 +71,14 @@ if ! type rvm > /dev/null; then
   \curl -sSL https://get.rvm.io | bash -s stable --ruby
   source /home/vagrant/.rvm/scripts/rvm
 fi
+
+#Better drush
+sudo apt-get remove drush
+sudo git clone https://github.com/drush-ops/drush.git /usr/local/src/drush
+cd /usr/local/src/drush
+sudo git checkout 7.4.0  #or whatever version you want.
+sudo ln -s /usr/local/src/drush/drush /usr/bin/drush
+sudo composer install
 
 # Gems - update, install some not included w/scotchbox, RVM.
 gem update
