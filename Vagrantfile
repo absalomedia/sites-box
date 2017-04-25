@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
     config.vm.hostname = CONF['vm_hostname']
     config.hostmanager.aliases = Array.new
 
-    config.vbguest.auto_update = true
+    config.vbguest.auto_update = false
 
      # do NOT download the iso file from a webserver
     config.vbguest.no_remote = false   
