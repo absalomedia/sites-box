@@ -1,9 +1,10 @@
-# sites-box 2
+# sites-box 3
 
 An extension of the [Scotch Box](https://box.scotch.io/) Vagrant lamp stack configured for hosting multiple sites in one box.
 
 Includes:
 
+* Built off latest Scotch Box (version 3)
 * Kernel distribution update
 * Scotch Box PHP5.x edition will update to PHP 7.1
 * FTP access using VSFTP

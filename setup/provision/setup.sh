@@ -2,21 +2,25 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
-phpversion="$(php --version | tail -r | tail -n 1 | cut -d " " -f 2 | cut -c 1,1)"
-
 # Print text when running vagrant up.
 echo "Starting VM..."
 
-if [ $(echo " $phpversion > 7" | bc) -eq 1 ]; then
-    # Drop in MariaDB && HHVM & PHP7.1 
-    sudo apt-get install software-properties-common
-    sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
-    sudo add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mirror.aarnet.edu.au/pub/MariaDB/repo/10.1/ubuntu trusty main'
-    sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
-    sudo add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
-    sudo add-apt-repository ppa:ondrej/php
-    sudo add-apt-repository ppa:ondrej/apache2
-fi
+# Drop in MariaDB && HHVM & PHP7.1 
+sudo apt-get install software-properties-common
+sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
+sudo add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mirror.aarnet.edu.au/pub/MariaDB/repo/10.1/ubuntu trusty main'
+sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
+sudo add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
+sudo add-apt-repository ppa:ondrej/php
+sudo add-apt-repository ppa:ondrej/apache2
+
+# Gems - update, install some not included w/scotchbox, RVM.
+gem update
+gem install net-sftp net-ssh mailcatcher
+gem clean
+
+echo "@reboot root $(which mailcatcher) --ip=0.0.0.0" >> /etc/crontab
+update-rc.d cron defaults
 
 # Keep packages up to date.
 sudo apt-get update
@@ -24,30 +28,23 @@ sudo apt-get upgrade -y --force-yes
 sudo apt-get dist-upgrade -y --force-yes
 # Update Apache to latest edition
 sudo apt-get upgrade apache2 -y --force-yes
-sudo apt-get autoremove
 
-if [ $(echo " $phpversion > 7" | bc) -eq 1 ]; then
-    sudo a2dismod php5
-    sudo apt-get purge 'php5.6*'
-    # Remove PHP5.6 repo in prep for 7.1
-    sudo rm /etc/apt/sources.list.d/ondrej-php5-5*
+sudo a2dismod php7.0
 
-    sudo apt-get install php7.1 php7.1-cli php7.1-common php7.1-mysql php7.1-fpm php7.1-pgsql php7.1-sqlite3 php7.1-mongo libapache2-mod-php7.1 php7.1-redis php7.1-intl php7.1-tidy php7.1-readline php7.1-xdebug php7.1-ssh2 php7.1-json php7.1-mcrypt php7.1-curl php7.1-gd php-uploadprogress php7.1-apc php7.1-xml php7.1-mbstring php7.1-imagick php-xhprof php-memcache php-memcached php-mongo php-libsodium blackfire-php sendmail redis-server locate -y --force-yes
-
-    sudo cp /etc/php5/mods-available/mailcatcher.ini /etc/php/7.1/mods-available/mailcatcher.ini
-    sudo cp /etc/php5/mods-available/memcache.ini /etc/php/7.1/mods-available/memcache.ini
-    sudo cp /etc/php5/mods-available/memcached.ini /etc/php/7.1/mods-available/memcached.ini
-    sudo a2enmod php7.1
-    sudo a2enmod http2
-    sudo phpenmod mailcatcher
-    sudo phpenmod memcache
-    sudo phpenmod memcached
-fi
-
-# Add extras not included w/scotchbox.
-sudo apt-get install subversion openjdk-7-jre-headless nfs-common nfs-kernel-server dnsmasq pkg-config cmake php-codesniffer phpunit libssh2-1-dev libssh2-php vsftpd -y --force-yes
-
+sudo apt-get install php7.1 php7.1-cli php7.1-common php7.1-mysql php7.1-fpm php7.1-enchant php7.1-pgsql php7.1-sqlite3 php7.1-mongo libapache2-mod-php7.1 php7.1-redis php7.1-intl php7.1-tidy php7.1-readline php7.1-xdebug php7.1-ssh2 php7.1-json php7.1-mcrypt php7.1-dev php7.1-curl php7.1-gd php-uploadprogress php7.1-apc php7.1-xml php7.1-mbstring php7.1-imagick php-memcache php-memcached php-mongo php-libsodium blackfire-php sendmail redis-server locate git nfs-common nfs-kernel-server dnsmasq pkg-config cmake -y --force-yes
 sudo apt-get install mariadb-server mariadb-client hhvm -y --force-yes
+
+
+sudo echo "sendmail_path = /usr/bin/env $(which catchmail) -f 'www-data@localhost'" >> /etc/php/7.1/mods-available/mailcatcher.ini
+sudo cp /etc/php/7.0/mods-available/memcache.ini /etc/php/7.1/mods-available/memcache.ini
+sudo cp /etc/php/7.0/mods-available/memcached.ini /etc/php/7.1/mods-available/memcached.ini
+
+sudo a2enmod php7.1
+sudo a2enmod http2
+sudo phpenmod mailcatcher
+sudo phpenmod memcache
+sudo phpenmod memcached
+
 # sudo /usr/share/hhvm/install_fastcgi.sh
 sudo service apache2 restart
 sudo service mysql restart
@@ -71,11 +68,6 @@ if ! type rvm > /dev/null; then
   \curl -sSL https://get.rvm.io | bash -s stable --ruby
   source /home/vagrant/.rvm/scripts/rvm
 fi
-
-# Gems - update, install some not included w/scotchbox, RVM.
-gem update
-gem install compass net-sftp net-ssh
-gem clean
 
 # Add Composer to PATH.
 export PATH="~/.composer/vendor/bin:$PATH"
