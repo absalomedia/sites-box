@@ -16,7 +16,7 @@ sudo add-apt-repository ppa:ondrej/apache2
 
 # Gems - update, install some not included w/scotchbox, RVM.
 gem update
-gem install net-sftp net-ssh mailcatcher
+gem install net-sftp net-ssh
 gem clean
 
 echo "@reboot root $(which mailcatcher) --ip=0.0.0.0" >> /etc/crontab
@@ -31,7 +31,7 @@ sudo apt-get upgrade apache2 -y --force-yes
 
 sudo a2dismod php7.0
 
-sudo apt-get install php7.1 php7.1-cli php7.1-common php7.1-mysql php7.1-fpm php7.1-enchant php7.1-pgsql php7.1-sqlite3 php7.1-mongo libapache2-mod-php7.1 php7.1-redis php7.1-intl php7.1-tidy php7.1-readline php7.1-xdebug php7.1-ssh2 php7.1-json php7.1-mcrypt php7.1-dev php7.1-curl php7.1-gd php-uploadprogress php7.1-apc php7.1-xml php7.1-mbstring php7.1-imagick php-memcache php-memcached php-mongo php-libsodium blackfire-php sendmail redis-server locate git nfs-common nfs-kernel-server dnsmasq pkg-config cmake -y --force-yes
+sudo apt-get install php7.1 php7.1-cli php7.1-common php7.1-mysql php7.1-fpm php7.1-enchant php7.1-pgsql php7.1-sqlite3 php7.1-mongo libapache2-mod-php7.1 php7.1-redis php7.1-intl php7.1-tidy php7.1-readline php7.1-xdebug php7.1-ssh2 php7.1-json php7.1-mcrypt php7.1-dev php7.1-curl php7.1-gd php-uploadprogress php7.1-apc php7.1-xml php7.1-mbstring php7.1-imagick php-memcache php-memcached php-mongo php-libsodium blackfire-php redis-server locate git nfs-common nfs-kernel-server dnsmasq pkg-config cmake -y --force-yes
 sudo apt-get install mariadb-server mariadb-client hhvm -y --force-yes
 
 
@@ -83,6 +83,34 @@ cd /usr/local/src/drush
 sudo git checkout 7.4.0  #or whatever version you want.
 sudo ln -s /usr/local/src/drush/drush /usr/bin/drush
 sudo composer install
+
+#MailHog
+echo ">>> Installing Mailhog"
+
+# Download binary from github
+sudo wget --quiet -O ~/mailhog https://github.com/mailhog/MailHog/releases/download/v1.0.0/MailHog_linux_amd64
+
+# Make it executable
+sudo chmod +x ~/mailhog
+
+# Make it start on reboot
+sudo tee /etc/systemd/system/mailhog.service <<EOL
+[Unit]
+Description=MailHog Service
+After=network.service vagrant.mount
+[Service]
+Type=simple
+ExecStart=/usr/bin/env /home/vagrant/mailhog > /dev/null 2>&1 &
+[Install]
+WantedBy=multi-user.target
+EOL
+
+# moving mailhog to init.d
+`sudo mv ~/mailhog /etc/init.d/mailhog`
+
+# updating service mailhog
+`sudo update-rc.d mailhog defaults`
+
 
 # Setup the files for level vhost (nothing to be shown there ATM).
 # @TODO Get the ScotchBox index.php to serve from there.
