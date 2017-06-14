@@ -20,7 +20,7 @@ sudo add-apt-repository ppa:ondrej/apache2
 
 # Gems - update, install some not included w/scotchbox, RVM.
 gem update
-gem install net-sftp net-ssh
+gem install net-sftp net-ssh mailcatcher
 gem clean
 
 echo "@reboot root $(which mailcatcher) --ip=0.0.0.0" >> /etc/crontab
