@@ -16,6 +16,7 @@ sudo apt-get update
 sudo apt-get upgrade -y --force-yes
 sudo apt-get dist-upgrade -y --force-yes
 sudo apt-get install update-manager-core
+sudo apt-get do-release-upgrade -d -y
 sudo apt-get autoremove -y
 # Update Apache to latest edition
 sudo apt-get upgrade apache2 -y --force-yes
@@ -24,7 +25,7 @@ echo "Add MariaDB & HHVM repos"
 # Drop in MariaDB && HHVM & PHP7.1 
 sudo apt-get install software-properties-common
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
-sudo add-apt-repository "deb [arch=amd64,i386,ppc64el] http://mirror.aarnet.edu.au/pub/MariaDB/repo/10.2/ubuntu trusty main"
+sudo add-apt-repository "deb [arch=amd64,i386,ppc64el] http://mirror.aarnet.edu.au/pub/MariaDB/repo/10.2/ubuntu $(lsb_release -sc)  main"
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
 sudo add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
 sudo add-apt-repository ppa:ondrej/php
