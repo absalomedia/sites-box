@@ -5,6 +5,10 @@ export DEBIAN_FRONTEND=noninteractive
 # Print text when running vagrant up.
 echo "Starting VM..."
 
+echo "Dropping PHP 5.6"
+#Drop PHP5.6 repo
+sudo rm /etc/apt/sources.list.d/ondrej-php5-5_6-trusty.list
+sudo rm /etc/apt/sources.list.d/ondrej-php5-5_6-trusty.list.save
 # Drop in MariaDB && HHVM & PHP7.1 
 sudo apt-get install software-properties-common
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
@@ -34,8 +38,7 @@ sudo a2dismod php7.0
 sudo apt-get install php7.1 php7.1-cli php7.1-common php7.1-mysql php7.1-fpm php7.1-enchant php7.1-pgsql php7.1-sqlite3 php7.1-mongo libapache2-mod-php7.1 php7.1-redis php7.1-intl php7.1-tidy php7.1-readline php7.1-xdebug php7.1-ssh2 php7.1-json php7.1-mcrypt php7.1-dev php7.1-curl php7.1-gd php-uploadprogress php7.1-apc php7.1-xml php7.1-mbstring php7.1-imagick php-memcache php-memcached php-mongo php-libsodium blackfire-php redis-server locate git nfs-common nfs-kernel-server dnsmasq pkg-config cmake -y --force-yes
 sudo apt-get install mariadb-server mariadb-client hhvm -y --force-yes
 
-
-sudo echo "sendmail_path = /usr/bin/env $(which catchmail) -f 'www-data@localhost'" >> /etc/php/7.1/mods-available/mailcatcher.ini
+sudo cp /etc/php5/mods-available/mailcatcher.ini /etc/php/7.1/mods-available/mailcatcher.ini
 sudo cp /etc/php/7.0/mods-available/memcache.ini /etc/php/7.1/mods-available/memcache.ini
 sudo cp /etc/php/7.0/mods-available/memcached.ini /etc/php/7.1/mods-available/memcached.ini
 
@@ -49,12 +52,14 @@ sudo phpenmod memcached
 sudo service apache2 restart
 sudo service mysql restart
 
+echo "Add Meteor & Reaction Commerce"
 # Add in MeteorJS
 if ! type meteor > /dev/null; then
     sudo curl -k https://install.meteor.com/ | sh
     sudo npm install -g reaction-cli
 fi
 
+echo "Add CodeCeption"
 # Install Codeception if it isn't already here.
 if ! type codecept > /dev/null; then
   sudo wget http://codeception.com/codecept.phar -O /usr/local/bin/codecept
