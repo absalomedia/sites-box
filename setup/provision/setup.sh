@@ -156,6 +156,13 @@ VIRTUALHOSTCONF
 
 done
 
+echo "Remove PHP5 and PHP 7.0"
+sudo apt-get remove --auto-remove php7.0-common -y
+sudo apt-get remove --auto-remove php5-common -y
+
+echo "Update MongoDB driver & Upload Progress"
+sudo pecl channel-update pecl.php.net
+sudo pecl install mongodb
 
 echo "Added and enabled vhosts. Updating PHP limits. Restarting Apache..."
 sudo sed -ie 's/ 2M/ 24M/g' /etc/php/7.1/apache2/php.ini
