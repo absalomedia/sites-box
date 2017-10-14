@@ -63,6 +63,6 @@ Vagrant.configure("2") do |config|
     config.vm.provision "shell", inline: "sudo service apache2 restart", run: "always"
     # config.vm.provision "file", source: "setup/provision/my.cnf", destination: "/etc/mysql/my.cnf"
     config.vm.provision "shell", inline: "sudo service mysql restart", run: "always"    
-    config.vm.provision "shell", inline: "/home/vagrant/.rbenv/shims/mailcatcher --http-ip=0.0.0.0", run: "always"
+    # config.vm.provision "shell", inline: "/home/vagrant/.rbenv/shims/mailcatcher --http-ip=0.0.0.0", run: "always"
     config.vm.provision "shell", inline: "sudo composer self-update", run: "always"
 end
