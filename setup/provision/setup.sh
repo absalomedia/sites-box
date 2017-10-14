@@ -52,12 +52,12 @@ sudo phpenmod memcached
 sudo service apache2 restart
 sudo service mysql restart
 
-echo "Add Meteor & Reaction Commerce"
+#echo "Add Meteor & Reaction Commerce"
 # Add in MeteorJS
-if ! type meteor > /dev/null; then
-    sudo curl -k https://install.meteor.com/ | sh
-    sudo npm install -g reaction-cli
-fi
+#if ! type meteor > /dev/null; then
+#    sudo curl -k https://install.meteor.com/ | sh
+#    sudo npm install -g reaction-cli
+#fi
 
 echo "Add CodeCeption"
 # Install Codeception if it isn't already here.
