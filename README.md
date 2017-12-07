@@ -6,7 +6,7 @@ Includes:
 
 * Built off latest Scotch Box (version 3)
 * Kernel distribution update
-* Scotch Box PHP7.x edition will update to PHP 7.1
+* Scotch Box PHP7.x edition will update to PHP 7.2
 * FTP access using VSFTP
 * Drush
 * Composer updates to latest version
