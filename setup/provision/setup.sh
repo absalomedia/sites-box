@@ -33,8 +33,9 @@ sudo apt-get dist-upgrade -y --force-yes
 sudo apt-get upgrade apache2 -y --force-yes
 
 sudo a2dismod php7.0
+sudo a2dismod php7.1
 
-sudo apt-get install php7.2 php7.2-cli php7.2-common php7.2-mysql php7.2-fpm php7.2-enchant php7.2-pgsql php7.2-sqlite3 php7.2-mongo libapache2-mod-php7.2 php7.2-redis php7.2-intl php7.2-tidy php7.2-readline php7.2-xdebug php7.2-ssh2 php7.2-json php7.2-mcrypt php7.2-dev php7.2-curl php7.2-gd php-uploadprogress php7.2-apc php7.2-xml php7.2-mbstring php7.2-imagick php-memcache php-memcached php-mongo php-libsodium blackfire-php redis-server locate git nfs-common nfs-kernel-server dnsmasq pkg-config cmake -y --force-yes
+sudo apt-get install php7.2 php7.2-cli php7.2-common php7.2-mysql php7.2-fpm php7.2-enchant php7.2-pgsql php7.2-sqlite3 php7.2-mongo libapache2-mod-php7.2 php7.2-redis php7.2-intl php7.2-tidy php7.2-readline php7.2-ssh2 php7.2-json php7.2-dev php7.2-curl php7.2-gd php7.2-apc php7.2-xml php7.2-mbstring php7.2-imagick php-memcache php-memcached php-mongo blackfire-php redis-server locate git nfs-common nfs-kernel-server dnsmasq pkg-config cmake -y --force-yes
 sudo apt-get install mariadb-server mariadb-client -y --force-yes
 
 sudo cp /etc/php5/mods-available/mailcatcher.ini /etc/php/7.2/mods-available/mailcatcher.ini
@@ -155,8 +156,9 @@ VIRTUALHOSTCONF
 
 done
 
-echo "Remove PHP5 and PHP 7.0"
+echo "Remove PHP 5, 7.0 & 7.1"
 sudo apt-get remove --auto-remove php7.0-common -y
+sudo apt-get remove --auto-remove php7.1-common -y
 sudo apt-get remove --auto-remove php5-common -y
 
 echo "Update MongoDB driver & Upload Progress"
