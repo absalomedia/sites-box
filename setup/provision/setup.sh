@@ -214,6 +214,9 @@ sudo a2enmod http2
 sudo phpenmod memcache
 sudo phpenmod memcached
 
+composer g require psy/psysh:@stable
+composer g require friendsofphp/php-cs-fixer
+
 # /*==================================
 # =            BEANSTALKD            =
 # ==================================*/
