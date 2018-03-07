@@ -148,7 +148,11 @@ reboot_webserver_helper
 # /*=================================
 # =            PostreSQL            =
 # =================================*/
-sudo apt-get -y install postgresql postgresql-contrib
+sudo add-apt-repository 'deb http://apt.postgresql.org/pub/repos/apt/ zesty-pgdg main'
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
+  sudo apt-key add -
+sudo apt-get update
+sudo apt-get -y install postgresql-10 postgresql-contrib
 echo "CREATE ROLE root WITH LOGIN ENCRYPTED PASSWORD 'root';" | sudo -i -u postgres psql
 sudo -i -u postgres createdb --owner=root scotchbox
 sudo apt-get -y install php7.2-pgsql
@@ -264,7 +268,6 @@ sudo npm install -g browserify
 sudo npm install -g pm2
 sudo npm install -g webpack
 
-
 # /*============================
 # =            YARN            =
 # ============================*/
@@ -289,7 +292,6 @@ rvm use 2.5.0
 gem update
 gem install net-sftp net-ssh
 gem clean
-
 
 
 # /*=============================
