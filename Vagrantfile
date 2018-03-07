@@ -11,9 +11,6 @@ Vagrant.configure("2") do |config|
     config.hostmanager.aliases = Array.new
 
     config.vbguest.auto_update = true
-
-     # do NOT download the iso file from a webserver
-    config.vbguest.no_remote = false   
     
     config.ssh.username = CONF['ssh_username'] || "vagrant"
     config.ssh.password = CONF['ssh_password'] || "vagrant"
@@ -32,7 +29,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     end
 
-    config.vm.box = "scotch/box"
+    config.vm.box = "scotch/box-pro"
     config.vm.network "private_network", ip: CONF['vm_ip']
     config.vm.network :forwarded_port, guest: 3306, host: 3306, host_ip: "127.0.0.1"
     
@@ -40,12 +37,7 @@ Vagrant.configure("2") do |config|
     config.vm.synced_folder CONF['vm_data'], "/var/lib/mysql/", id: "mysql", owner: "mysql", group: "mysql", mount_options: ["dmode=775,fmode=664"]
     
     config.hostmanager.enabled = true
-
-    if Vagrant::Util::Platform.windows? then
-        config.hostmanager.manage_host = false
-    else
-        config.hostmanager.manage_host = true
-    end
+    config.hostmanager.manage_host = true
         
     # Format the domains as a comma-separated list
     # to pass into the shell script.
@@ -61,8 +53,6 @@ Vagrant.configure("2") do |config|
     # host machine sleeps or is halted and started back up.
     # @TODO Isolate and address the underlying problem here.
     config.vm.provision "shell", inline: "sudo service apache2 restart", run: "always"
-    # config.vm.provision "file", source: "setup/provision/my.cnf", destination: "/etc/mysql/my.cnf"
-    config.vm.provision "shell", inline: "sudo service mysql restart", run: "always"    
-    # config.vm.provision "shell", inline: "/home/vagrant/.rbenv/shims/mailcatcher --http-ip=0.0.0.0", run: "always"
+    # config.vm.provision "file", source: "setup/provision/my.cnf", destination: "/etc/mysql/my.cnf"   
     config.vm.provision "shell", inline: "sudo composer self-update", run: "always"
 end
