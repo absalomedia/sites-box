@@ -1,20 +1,21 @@
-# sites-box 3
+# sites-box 3.5
 
 An extension of the [Scotch Box](https://box.scotch.io/) Vagrant lamp stack configured for hosting multiple sites in one box.
 
 Includes:
 
-* Built off latest Scotch Box (version 3)
-* Kernel distribution update
-* Scotch Box PHP7.x edition will update to PHP 7.2
-* FTP access using VSFTP
-* Drush
-* Composer updates to latest version
-* Mailcatcher loads on boot
+* Built off latest Scotch Box (version 1.5P)
+* PHP 7.2
+* The latest [Phalcon](https://phalconphp.com/)
+* PostgreSQL [10](https://www.postgresql.org/) 
+* FTP access using [VSFTP](https://security.appspot.com/vsftpd.html)
+* [Drush](http://www.drush.org/) (7.4 for client compatibility with Drupal 7)
+* T
+* Mailhog
+* SSL enabled virtual hosts (self-signed based on config.yaml)
 * DNSMasq detection for Windows hosts
 * Latest edition of [MeteorJS](https://www.meteor.com) installed
 * Latest edition of [Reaction Commerce](https://reactioncommerce.com/) installed
-* [Sodium](https://download.libsodium.org/doc/) crypto library & XDebug for PHP
 * Apache virtual host directory now customised in config.yaml file
 * MariaDB upgrade from standard MySQL & custom configuration with UFT8 encoded database setup
 * MySQL data directory is now a synced folder to stop you losing data on when Vagrant image is destroyed

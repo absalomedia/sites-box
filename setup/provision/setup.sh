@@ -26,6 +26,7 @@ sudo apt-get install -y software-properties-common
 sudo apt-get install -y python-software-properties
 sudo apt-get -y install vim
 sudo apt-get -y install dnsmasq
+sudo apt-get -y install locate
 sudo apt-get -y install git
 
 # Weird Vagrant issue fix
@@ -40,6 +41,7 @@ sudo a2enmod expires
 sudo a2enmod headers
 sudo a2enmod include
 sudo a2enmod rewrite
+sudo a2enmod ssl
 
 sudo service apache2 restart
 
@@ -317,6 +319,7 @@ sudo apt-get -y install memcached
 sudo apt-get -y install php7.2-memcached
 sudo phpenmod memcache
 sudo phpenmod memcached
+
 reboot_webserver_helper
 
 
