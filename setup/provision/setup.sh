@@ -8,6 +8,7 @@ Happy Happy Joy Joy
 '
 
 reboot_webserver_helper() {
+    sudo apt-get update
     sudo service apache2 restart
     echo 'Rebooting your webserver'
 }
@@ -137,6 +138,8 @@ reboot_webserver_helper
 # /*=============================
 # =            MYSQL            =
 # =============================*/
+
+echo "Set up MySQL."
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
 sudo apt-get -y install mysql-server
@@ -144,7 +147,11 @@ sudo mysqladmin -uroot -proot create scotchbox
 sudo apt-get -y install php7.2-mysql
 reboot_webserver_helper
 
+echo "Updating MySQL."
+sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
+sudo service mysql restart
 
+echo "Setting up PostGres 10"
 # /*=================================
 # =            PostreSQL            =
 # =================================*/
@@ -389,8 +396,12 @@ for ((i=0; i < ${#DOMAINS_ARR[@]}; i++)); do
     mkdir -p /var/www/vhosts/$DOMAIN/public
     mkdir -p /var/www/vhosts/$DOMAIN/logs
 
+    echo "Creating SSL config for $DOMAIN..."
+    mkdir -p /var/www/vhosts/$DOMAIN/certs
+    cd /var/www/vhosts/$DOMAIN/certs
+    openssl genrsa -out $DOMAIN.key 2048
+    openssl req -new -x509 -sha256 -key $DOMAIN.key -out $DOMAIN.cert -days 3650 -subj /CN=$DOMAIN
     echo "Creating vhost config for $DOMAIN..."
-
     cat << VIRTUALHOSTCONF > /etc/apache2/sites-available/$DOMAIN.conf
 <VirtualHost *:80>
   ServerAdmin webmaster@localhost
@@ -400,6 +411,17 @@ for ((i=0; i < ${#DOMAINS_ARR[@]}; i++)); do
   DirectoryIndex index.html index.php
   ErrorLog /var/www/vhosts/$DOMAIN/logs/error.log
   CustomLog /var/www/vhosts/$DOMAIN/logs/access.log combined
+</VirtualHost>
+<VirtualHost *:443>
+  SSLEngine On
+  SSLCertificateFile /var/www/vhosts/$DOMAIN/certs/$DOMAIN.crt 
+  SSLCertificateKeyFile /var/www/vhosts/$DOMAIN/certs/$DOMAIN.key 
+  ServerAdmin webmaster@localhost
+  ServerName $DOMAIN
+  ServerAlias *.$DOMAIN
+  DocumentRoot /var/www/vhosts/$DOMAIN/public
+  ErrorLog /var/www/vhosts/$DOMAIN/logs/error.log
+  CustomLog /var/www/vhosts/$DOMAIN/logs/access.log combined 
 </VirtualHost>
 VIRTUALHOSTCONF
 
