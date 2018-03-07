@@ -53,6 +53,5 @@ Vagrant.configure("2") do |config|
     # host machine sleeps or is halted and started back up.
     # @TODO Isolate and address the underlying problem here.
     config.vm.provision "shell", inline: "sudo service apache2 restart", run: "always"
-    # config.vm.provision "file", source: "setup/provision/my.cnf", destination: "/etc/mysql/my.cnf"   
     config.vm.provision "shell", inline: "sudo composer self-update", run: "always"
 end
