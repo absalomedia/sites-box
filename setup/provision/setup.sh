@@ -4,11 +4,34 @@
 # =            VARIABLES            =
 # =================================*/
 WELCOME_MESSAGE='
-Happy Happy Joy Joy
+MMMMMMMMMMMMMNNNmmmmyso++++oossdmmNNMMMMMMMMMMMMMM
+yssoo+++oosyyhhhhhhhhhhhdddhhhhhhhhhhhyssooossyhhh
+::::::ooo+oosyyyyyyhhhhhdddhhhhhyhyyysoooooo::::::
++:::/::::/++++o/////+++++++////oooo++o+//:::/-:::/
+o::/::+osss+/::::::::::::---:-:/::-:/ooo++:::/:--o
+y:/:/yydNdhyso/::::::::::::::::::/oyyyhmdhhs/:/:-y
+Mh:/yhhMdhyyysso:::::::-:::::::/ssyyyyyhddhhy+::sN
+Md:ohsMmhyyyyyyso/:::::-:--:::ooyyyyyyyyhhhhhy/:mM
+MN:yhhMhyyyyyyyyss/::::---::/s+/syyyyyyyyyyhhho:NM
+MM/yhdhdyyyyyyyyyss/:/:::::/ss//+syyyyyyhyhhdho/MM
+MM+shhddyyyyyyyyyyso::/s:-:syss///oyyyys+shhdhooMM
+MMs+hyymyyyyyyyyyyys/:/o::+sysss+s+//////yhhhy/sMM
+MMh:yhyhyosyyyyyyyhyo::s::syysyyyyo++++oyhhhhs:hMM
+MM+/+yhhhhssyyyyhhdho::s:/syyyyyyyyyyyyhhhhhy/:hMM
+MM/::shhhddhhyyyhhdhs++y+oyhyyyyyyyyyyhhhhhy+:::NM
+MM+::/shddddhyhhyyyys://-:yyyyyyyyyyyhhddhy+::-:MM
+MMs:::/ohddddhhyyyys+:/+-:oyyyyyyyyhhdddhy/::::+MM
+MMNho:::/yhdhhhhhhyo::/+-::sysyhdhhmdhhyo::::::hMM
+MMMMMNhsy++shddhhy+:://o::::oyhmhdddhy+:/o/+ymMMMM
+MMMMMMMMMMmh+////:://:/:::/:::/+ooo/oohmMMMMMMMMMM
+MMMMMMMMMMMMMmy+://::::----://:::oymMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMy::::::--:::--sdMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMmy+::::::-:oyNMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMmy+:+ymMMMMMMMMMMMMMMMMMMMMMMM
+The cake is a lie. Site Box 3.5
 '
 
 reboot_webserver_helper() {
-    sudo apt-get update
     sudo service apache2 restart
     echo 'Rebooting your webserver'
 }
@@ -167,6 +190,10 @@ sudo apt-get -y install postgresql-10 postgresql-contrib
 echo "CREATE ROLE root WITH LOGIN ENCRYPTED PASSWORD 'root';" | sudo -i -u postgres psql
 sudo -i -u postgres createdb --owner=root scotchbox
 sudo apt-get -y install php7.2-pgsql
+sudo pg_dropcluster 10 main --stop
+sudo systemctl stop postgresql
+sudo pg_upgradecluster -m upgrade 9.6 main
+sudo pg_dropcluster 9.6 main --stop
 reboot_webserver_helper
 
 
