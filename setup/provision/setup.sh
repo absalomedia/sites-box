@@ -479,6 +479,7 @@ echo "$WELCOME_MESSAGE" | sudo tee /etc/motd
 # =            FINAL GOOD MEASURE, WHY NOT            =
 # ===================================================*/
 sudo apt-get update
+sudo apt autoremove
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 reboot_webserver_helper
 
