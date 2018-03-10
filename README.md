@@ -10,8 +10,8 @@ Includes:
 * PostgreSQL [10](https://www.postgresql.org/) 
 * FTP access using [VSFTP](https://security.appspot.com/vsftpd.html)
 * [Drush](http://www.drush.org/) (7.4 for client compatibility with Drupal 7)
-* T
-* Mailhog
+* Ability to set multi core CPUs & increased VM memory
+* [Mailhog](https://github.com/mailhog/MailHog)
 * SSL enabled virtual hosts (self-signed based on config.yaml)
 * DNSMasq detection for Windows hosts
 * Latest edition of [MeteorJS](https://www.meteor.com) installed
