@@ -8,6 +8,8 @@ CONF = YAML.load(File.open(File.join(File.dirname(__FILE__), "config.yaml"), Fil
 Vagrant.configure("2") do |config|
 
     config.vm.hostname = CONF['vm_hostname']
+    config.vm.cpus = CONF['vm_cpu']
+    config.vm.memory = CONF['vm_memory']
     config.hostmanager.aliases = Array.new
 
     config.vbguest.auto_update = true
@@ -26,7 +28,9 @@ Vagrant.configure("2") do |config|
     #  the VM without this).
     # @TODO Add support for other providers (i.e, VMWare)
     config.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm", :id, "--vram", "16"]
       vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      vb.customize ['modifyvm', :id, '--ioapic', 'on']
     end
 
     config.vm.box = "scotch/box-pro"
