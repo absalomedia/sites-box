@@ -213,10 +213,8 @@ reboot_webserver_helper
 # /*===============================
 # =            MONGODB            =
 # ===============================*/
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
-echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
 sudo apt-get update
-sudo apt-get install -y mongodb-org
+sudo apt-get install -y mongodb
 
 sudo tee /lib/systemd/system/mongod.service  <<EOL
 [Unit]
@@ -301,8 +299,11 @@ sudo apt-get -y install npm
 wget -qO- https://raw.github.com/creationix/nvm/master/install.sh | bash
 source ~/.nvm/nvm.sh
 nvm install 8.9.4
+nvm use 8.9.4
+nvm alias default 8.9.4
 
 # Node Packages
+sudo npm install -g npm
 sudo npm install -g gulp
 sudo npm install -g grunt
 sudo npm install -g bower
