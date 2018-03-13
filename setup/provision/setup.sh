@@ -169,18 +169,24 @@ reboot_webserver_helper
 # =============================*/
 
 echo "Set up MySQL."
+
+
+sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+echo -e 'deb [arch=amd64,i386] https://mirrors.evowise.com/mariadb/repo/10.2/ubuntu artful main\ndeb-src https://mirrors.evowise.com/mariadb/repo/10.2/ubuntu artful main' | sudo tee /etc/apt/sources.list.d/mariadb.list > /dev/null
+sudo apt update
+sudo apt-get dist-upgrade -y
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
-sudo apt-get -y install mysql-server
+sudo apt-get -y install mariadb-server
 sudo mysqladmin -uroot -proot create scotchbox
 sudo apt-get -y install php7.2-mysql
 reboot_webserver_helper
 
 echo "Updating MySQL."
 sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
-sudo wget -P /etc/mysql/mysql.conf.d/ https://gist.githubusercontent.com/Xeoncross/2d0503cee10a6374c627f0faaed9ea3f/raw/755f53a68770a31b4b56c14e11e944e9facb10b5/utf8mb4.cnf
-sudo mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
-sudo mysql_ssl_rsa_setup
+#sudo wget -P /etc/mysql/mysql.conf.d/ https://gist.githubusercontent.com/Xeoncross/2d0503cee10a6374c627f0faaed9ea3f/raw/755f53a68770a31b4b56c14e11e944e9facb10b5/utf8mb4.cnf
+#sudo mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
+#sudo mysql_ssl_rsa_setup
 sudo service mysql restart
 
 echo "Setting up PostGres 10"
