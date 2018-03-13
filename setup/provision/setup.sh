@@ -122,9 +122,12 @@ sudo apt-get -y install php7.2-imagick
 
 echo "Adding Phalcon to PHP"
 # Phalcon
-sudo curl -s "https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh" | sudo bash
-sudo apt-get -y install php7.2-phalcon
-
+sudo cd ~/
+sudo git clone --depth=1 -b 3.3.x  "git://github.com/phalcon/cphalcon.git"
+sudo cd ~/cphalcon/build
+sudo ./install
+sudo echo "extension=phalcon.so" > /etc/php/7.2/mods-available/phalcon.ini
+sudo rm -rf ~/cphalcon
 
 
 # /*===========================================
