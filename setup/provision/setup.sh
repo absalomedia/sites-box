@@ -170,12 +170,12 @@ reboot_webserver_helper
 # /*=============================
 # =            MYSQL            =
 # =============================*/
-
 echo "Set up MySQL."
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
 sudo apt-get -y install mysql-server
-sudo mysqladmin -uroot -proot create scotchbox
+sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
+sudo mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
 sudo apt-get -y install php7.2-mysql
 reboot_webserver_helper
 
