@@ -33,13 +33,14 @@ The cake is a lie. Site Box 3.5
 
 reboot_webserver_helper() {
     sudo service apache2 restart
-    sudo apt-get autoremove
+    sudo apt -y autoremove
+    sudo apt-get -y autoremove
     echo 'Rebooting your webserver'
 }
 
 
 echo "Starting VM..."
-sudo apt-get update
+sudo apt-get -qq update
 
 # The following is "sudo apt-get -y upgrade" without any prompts
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
@@ -59,7 +60,7 @@ sudo apt-get install -y ifupdown
 
 echo "Updating Apache..."
 sudo add-apt-repository -y ppa:ondrej/apache2 # Super Latest Version
-sudo apt-get update
+sudo apt-get -qq update
 sudo apt-get -y install apache2
 
 sudo a2enmod expires
@@ -68,11 +69,11 @@ sudo a2enmod include
 sudo a2enmod rewrite
 sudo a2enmod ssl
 
-sudo service apache2 restart
+reboot_webserver_helper
 
 echo "Updating PHP"
 sudo add-apt-repository -y ppa:ondrej/php # Super Latest Version (currently 7.2)
-sudo apt-get update
+sudo apt-get -qq update
 sudo apt-get install -y php7.2
 sudo apt-get -y install libapache2-mod-php
 
@@ -171,18 +172,12 @@ reboot_webserver_helper
 # =============================*/
 
 echo "Set up MySQL."
-export DEBIAN_FRONTEND=noninteractive
-sudo apt-get remove --purge mysql-server mysql-client
-sudo apt-get autoremove
-sudo apt-get autoclean
-sudo apt-get install -y debconf-utils -y > /dev/null
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
-sudo apt install -y mysql-server mysql-client
-sed -i 's/bind-address/bind-address = 0.0.0.0#/' /etc/mysql/mysql.conf.d/mysqld.cnf
-sudo mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
-#sudo mysql_ssl_rsa_setup
-sudo service mysql restart
+sudo apt-get -y install mysql-server
+sudo mysqladmin -uroot -proot create scotchbox
+sudo apt-get -y install php7.2-mysql
+reboot_webserver_helper
 
 echo "Setting up PostGres 10"
 # /*=================================
@@ -191,7 +186,7 @@ echo "Setting up PostGres 10"
 sudo add-apt-repository 'deb http://apt.postgresql.org/pub/repos/apt/ zesty-pgdg main'
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
   sudo apt-key add -
-sudo apt-get update
+sudo apt-get -qq update
 sudo apt-get -y install postgresql-10 postgresql-contrib
 echo "CREATE ROLE root WITH LOGIN ENCRYPTED PASSWORD 'root';" | sudo -i -u postgres psql
 sudo -i -u postgres createdb --owner=root scotchbox
@@ -214,7 +209,7 @@ reboot_webserver_helper
 # /*===============================
 # =            MONGODB            =
 # ===============================*/
-sudo apt-get update
+sudo apt-get -qq update
 sudo apt-get install -y mongodb
 
 sudo tee /lib/systemd/system/mongod.service  <<EOL
@@ -235,7 +230,7 @@ sudo systemctl enable mongod
 sudo service mongod start
 
 # Enable it for PHP
-sudo pecl install mongodb
+# sudo pecl install mongodb
 sudo apt-get install -y php7.2-mongodb
 
 reboot_webserver_helper
@@ -288,7 +283,7 @@ sudo composer install
 # /*=============================
 # =            NGROK            =
 # =============================*/
-sudo apt-get install ngrok-client
+#sudo apt-get install ngrok-client
 
 # /*==============================
 # =            NODEJS            =
@@ -319,7 +314,7 @@ sudo npm install -g webpack
 # ============================*/
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-sudo apt-get update
+sudo apt-get -qq update
 sudo apt-get -y install yarn
 
 # /*============================
@@ -361,8 +356,7 @@ reboot_webserver_helper
 # /*==============================
 # =            GOLANG            =
 # ==============================*/
-sudo add-apt-repository -y ppa:longsleep/golang-backports
-sudo apt-get update
+sudo apt-get -qq update
 sudo apt-get -y dist-upgrade
 sudo apt-get -y install golang-go
 
@@ -501,8 +495,7 @@ echo "$WELCOME_MESSAGE" | sudo tee /etc/motd
 # /*===================================================
 # =            FINAL GOOD MEASURE, WHY NOT            =
 # ===================================================*/
-sudo apt-get update
-sudo apt-get autoremove
+sudo apt-get -qq update
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 reboot_webserver_helper
 
