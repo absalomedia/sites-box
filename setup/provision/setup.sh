@@ -33,6 +33,7 @@ The cake is a lie. Site Box 3.5
 
 reboot_webserver_helper() {
     sudo service apache2 restart
+    sudo apt-get autoremove
     echo 'Rebooting your webserver'
 }
 
@@ -81,7 +82,7 @@ sudo apt-get -y install libapache2-mod-php
     </IfModule>'
     echo "$MAKE_PHP_PRIORITY" | sudo tee /etc/apache2/mods-enabled/dir.conf
 
-sudo service apache2 restart
+reboot_webserver_helper
 
 sudo apt-get -y install php7.2-common
 sudo apt-get -y install php7.2-dev
@@ -120,14 +121,15 @@ sudo apt-get -y install php7.2-curl
 sudo apt-get -y install imagemagick
 sudo apt-get -y install php7.2-imagick
 
+reboot_webserver_helper
+
 echo "Adding Phalcon to PHP"
 # Phalcon
-sudo cd ~/
+sudo apt-get -y install re2c
 sudo git clone --depth=1 -b 3.3.x  "git://github.com/phalcon/cphalcon.git"
-sudo cd ~/cphalcon/build
-sudo ./install
+cd cphalcon/build && sudo ./install
 sudo echo "extension=phalcon.so" > /etc/php/7.2/mods-available/phalcon.ini
-sudo rm -rf ~/cphalcon
+cd ../../ && sudo rm -rf cphalcon
 
 
 # /*===========================================
@@ -169,23 +171,16 @@ reboot_webserver_helper
 # =============================*/
 
 echo "Set up MySQL."
-
-
-sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
-echo -e 'deb [arch=amd64,i386] https://mirrors.evowise.com/mariadb/repo/10.2/ubuntu artful main\ndeb-src https://mirrors.evowise.com/mariadb/repo/10.2/ubuntu artful main' | sudo tee /etc/apt/sources.list.d/mariadb.list > /dev/null
-sudo apt update
-sudo apt-get dist-upgrade -y
+export DEBIAN_FRONTEND=noninteractive
+sudo apt-get remove --purge mysql-server mysql-client
+sudo apt-get autoremove
+sudo apt-get autoclean
+sudo apt-get install -y debconf-utils -y > /dev/null
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
-sudo apt-get -y install mariadb-server
-sudo mysqladmin -uroot -proot create scotchbox
-sudo apt-get -y install php7.2-mysql
-reboot_webserver_helper
-
-echo "Updating MySQL."
-sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
-#sudo wget -P /etc/mysql/mysql.conf.d/ https://gist.githubusercontent.com/Xeoncross/2d0503cee10a6374c627f0faaed9ea3f/raw/755f53a68770a31b4b56c14e11e944e9facb10b5/utf8mb4.cnf
-#sudo mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
+sudo apt install -y mysql-server mysql-client
+sed -i 's/bind-address/bind-address = 0.0.0.0#/' /etc/mysql/mysql.conf.d/mysqld.cnf
+sudo mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
 #sudo mysql_ssl_rsa_setup
 sudo service mysql restart
 
@@ -402,11 +397,18 @@ echo 'sendmail_path = /usr/bin/mhsendmail' | sudo tee -a /etc/php/7.2/apache2/co
 
 reboot_webserver_helper
 
+# /*===============================
+# =            VSFTPD            =
+# ===============================*/
 echo "Added and enabled VSFTPD. Restarting VSFTPD..."
 sudo apt-get install vsftpd
 sudo wget https://gist.github.com/anonymous/1204611 /etc/vsftpd.conf
 sudo service vsftpd restart
 
+
+# /*===============================
+# =   METEOR & REACTIONCOMMERCE   =
+# ===============================*/
 #echo "Add Meteor & Reaction Commerce"
 # Add in MeteorJS
 if ! type meteor > /dev/null; then
@@ -456,6 +458,11 @@ for ((i=0; i < ${#DOMAINS_ARR[@]}; i++)); do
   DirectoryIndex index.html index.php
   ErrorLog /var/www/vhosts/$DOMAIN/logs/error.log
   CustomLog /var/www/vhosts/$DOMAIN/logs/access.log combined
+    <Directory "/var/www/vhosts/$DOMAIN/public">
+        Options All
+        AllowOverride All
+        Require all granted
+    </Directory>
 </VirtualHost>
 <VirtualHost *:443>
   SSLEngine On
@@ -466,7 +473,12 @@ for ((i=0; i < ${#DOMAINS_ARR[@]}; i++)); do
   ServerAlias *.$DOMAIN
   DocumentRoot /var/www/vhosts/$DOMAIN/public
   ErrorLog /var/www/vhosts/$DOMAIN/logs/error.log
-  CustomLog /var/www/vhosts/$DOMAIN/logs/access.log combined 
+  CustomLog /var/www/vhosts/$DOMAIN/logs/access.log combined
+      <Directory "/var/www/vhosts/$DOMAIN/public">
+        Options All
+        AllowOverride All
+        Require all granted
+    </Directory> 
 </VirtualHost>
 VIRTUALHOSTCONF
 
@@ -490,7 +502,7 @@ echo "$WELCOME_MESSAGE" | sudo tee /etc/motd
 # =            FINAL GOOD MEASURE, WHY NOT            =
 # ===================================================*/
 sudo apt-get update
-sudo apt autoremove
+sudo apt-get autoremove
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 reboot_webserver_helper
 

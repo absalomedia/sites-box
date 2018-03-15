@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
     config.vm.provider :virtualbox do |vb|
       vb.cpus = CONF['vm_cpu']
       vb.memory = CONF['vm_memory']
-      vb.customize ["modifyvm", :id, "--vram", "16"]
+      vb.customize ["modifyvm", :id, "--vram", "32"]
       vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       vb.customize ['modifyvm', :id, '--ioapic', 'on']
     end
