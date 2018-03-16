@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
     config.vm.network :forwarded_port, guest: 3306, host: 3306, host_ip: "127.0.0.1"
     
     config.vm.synced_folder CONF['vm_code'], "/var/www/vhosts", :nfs => { :mount_options => ["dmode=777","fmode=666",'rw', 'vers=3', 'tcp'] }
-    config.vm.synced_folder CONF['vm_data'], "/var/lib/mysql", id: "mysql", owner: "mysql", group: "mysql", mount_options: ["dmode=777,fmode=666",'rw', 'vers=3', 'tcp']
+    config.vm.synced_folder CONF['vm_data'], "/var/lib/mysql", id: "mysql", owner: "mysql", group: "mysql", mount_options: ["dmode=777,fmode=666"]
     
     config.hostmanager.enabled = true
     if Vagrant::Util::Platform.windows? then
@@ -63,8 +63,7 @@ Vagrant.configure("2") do |config|
     # @TODO Isolate and address the underlying problem here.
     config.vm.provision "shell", inline: "sudo service apache2 restart", run: "always"
     config.vm.provision "shell", inline: "sudo composer self-update", run: "always"
-    config.vm.provision "shell",
-	inline: "mount -t nfs -o uid=`id -u mysql`,gid=`id -g mysql`,dmode=755,fmode=644 /var/lib/mysql /var/lib/mysql", run: "always"
+    config.vm.provision "shell", inline: "sudo service mysql restart", run: "always"
 
     # Hosts file management
     if Vagrant.has_plugin?("vagrant-hostmanager")

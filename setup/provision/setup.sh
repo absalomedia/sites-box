@@ -124,6 +124,7 @@ sudo apt-get -y install php7.2-imagick
 
 reboot_webserver_helper
 
+if ! type re2c > /dev/null; then
 echo "Adding Phalcon to PHP"
 # Phalcon
 sudo apt-get -y install re2c
@@ -131,7 +132,7 @@ sudo git clone --depth=1 -b 3.3.x  "git://github.com/phalcon/cphalcon.git"
 cd cphalcon/build && sudo ./install
 sudo echo "extension=phalcon.so" > /etc/php/7.2/mods-available/phalcon.ini
 cd ../../ && sudo rm -rf cphalcon
-
+fi
 
 # /*===========================================
 # =            CUSTOM PHP SETTINGS            =
@@ -162,9 +163,9 @@ reboot_webserver_helper
 # /*================================
 # =            PHP UNIT            =
 # ================================*/
-sudo wget https://phar.phpunit.de/phpunit-6.1.phar
-sudo chmod +x phpunit-6.1.phar
-sudo mv phpunit-6.1.phar /usr/local/bin/phpunit
+sudo wget https://phar.phpunit.de/phpunit-7.0.2.phar
+sudo chmod +x phpunit-7.0.2.phar
+sudo mv phpunit-7.0.2.phar /usr/local/bin/phpunit
 reboot_webserver_helper
 
 # /*=============================
@@ -177,6 +178,7 @@ sudo apt-get -y install mysql-server
 sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
 sudo apt-get -y install php7.2-mysql
+service mysql restart
 reboot_webserver_helper
 
 echo "Setting up PostGres 10"
@@ -189,12 +191,14 @@ wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
 sudo apt-get -qq update
 sudo apt-get -y install postgresql-10 postgresql-contrib
 echo "CREATE ROLE root WITH LOGIN ENCRYPTED PASSWORD 'root';" | sudo -i -u postgres psql
-sudo -i -u postgres createdb --owner=root scotchbox
 sudo apt-get -y install php7.2-pgsql
-sudo pg_dropcluster 10 main --stop
 sudo systemctl stop postgresql
-sudo pg_upgradecluster -m upgrade 9.6 main
-sudo pg_dropcluster 9.6 main --stop
+sudo pg_dropcluster 10 main --stop
+sudo pg_upgradecluster -m upgrade 9.5 main
+sudo pg_dropcluster 9.5 main --stop
+sudo apt-get autoremove --purge postgresql-9.5 
+sudo apt-get autoremove --purge postgresql-9.6
+sudo systemctl start postgresql
 reboot_webserver_helper
 
 
@@ -238,6 +242,7 @@ reboot_webserver_helper
 # /*================================
 # =            COMPOSER            =
 # ================================*/
+if ! type composer > /dev/null; then
 EXPECTED_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig)
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 ACTUAL_SIGNATURE=$(php -r "echo hash_file('SHA384', 'composer-setup.php');")
@@ -245,6 +250,7 @@ php composer-setup.php --quiet
 rm composer-setup.php
 sudo mv composer.phar /usr/local/bin/composer
 sudo chmod 755 /usr/local/bin/composer
+fi
 
 sudo a2enmod php7.2
 sudo a2enmod http2
@@ -312,10 +318,12 @@ sudo npm install -g webpack
 # /*============================
 # =            YARN            =
 # ============================*/
+if ! type yarn > /dev/null; then
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt-get -qq update
 sudo apt-get -y install yarn
+fi
 
 # /*============================
 # =            RUBY            =
@@ -356,10 +364,12 @@ reboot_webserver_helper
 # /*==============================
 # =            GOLANG            =
 # ==============================*/
+if ! type golang-go > /dev/null; then
+echo "Adding Go"
 sudo apt-get -qq update
 sudo apt-get -y dist-upgrade
 sudo apt-get -y install golang-go
-
+fi
 
 # /*===============================
 # =            MAILHOG            =
@@ -394,18 +404,19 @@ reboot_webserver_helper
 # /*===============================
 # =            VSFTPD            =
 # ===============================*/
+if ! type vsftpd > /dev/null; then
 echo "Added and enabled VSFTPD. Restarting VSFTPD..."
 sudo apt-get install vsftpd
 sudo wget https://gist.github.com/anonymous/1204611 /etc/vsftpd.conf
 sudo service vsftpd restart
-
+fi
 
 # /*===============================
 # =   METEOR & REACTIONCOMMERCE   =
 # ===============================*/
-#echo "Add Meteor & Reaction Commerce"
 # Add in MeteorJS
 if ! type meteor > /dev/null; then
+    echo "Add Meteor & Reaction Commerce"
     sudo curl -k https://install.meteor.com/ | sh
     sudo npm install -g reaction-cli
 fi
