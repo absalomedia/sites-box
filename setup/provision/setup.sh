@@ -101,6 +101,13 @@ sudo apt-get -y install php7.2-pspell
 sudo apt-get -y install php7.2-tidy
 sudo apt-get -y install php7.2-xmlrpc
 sudo apt-get -y install php7.2-zip
+sudo apt-get -y install php7.2-ssh2
+sudo apt-get -y install php7.2-msgpack
+sudo apt-get -y install php7.2-opcache
+sudo apt-get -y install php7.2-readline
+sudo apt-get -y install php7.2-igbinary
+sudo apt-get -y install php7.2-memcache 
+sudo apt-get -y install php7.2-memcached 
 
 # Enchant
 sudo apt-get -y install libenchant-dev
@@ -157,10 +164,7 @@ reboot_webserver_helper
 
 sudo apt purge php7.1*
 sudo apt purge php5.6*
-
-# The following is "sudo apt-get -y upgrade" without any prompts
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
-sudo apt-get -y dist-upgrade
+sudo apt autoremove -y
 
 # /*================================
 # =            PHP UNIT            =
@@ -176,7 +180,6 @@ reboot_webserver_helper
 echo "Set up MySQL."
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
-#sudo apt-get -y install mysql-server
 sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
 sudo apt-get -y install php7.2-mysql
@@ -198,11 +201,25 @@ sudo systemctl stop postgresql
 sudo pg_dropcluster 10 main --stop
 sudo pg_upgradecluster -m upgrade 9.5 main
 sudo pg_dropcluster 9.5 main --stop
-sudo apt-get autoremove --purge postgresql-9.5 
-sudo apt-get autoremove --purge postgresql-9.6
+sudo apt purge postgresql-9.5 
 sudo systemctl start postgresql
 reboot_webserver_helper
 
+echo "Setting up Microsoft SQL connector"
+# /*=================================
+# =            NMSSQL              =
+# =================================*/
+curl -s https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+sudo bash -c "curl -s https://packages.microsoft.com/config/ubuntu/16.04/prod.list > /etc/apt/sources.list.d/mssql-release.list"
+sudo apt-get update
+sudo ACCEPT_EULA=Y apt-get -y install msodbcsql mssql-tools
+sudo apt-get -y install unixodbc-dev
+sudo apt-get -y install gcc g++ make autoconf libc-dev pkg-config
+sudo pecl install sqlsrv
+sudo pecl install pdo_sqlsrv
+sudo bash -c "echo extension=sqlsrv.so > /etc/php7.2/conf.d/sqlsrv.ini"
+sudo bash -c "echo extension=pdo_sqlsrv.so > /etc/php7.2/conf.d/pdo_sqlsrv.ini"
+reboot_webserver_helper
 
 # /*==============================
 # =            SQLITE            =
@@ -240,6 +257,10 @@ sudo service mongod start
 sudo apt-get install -y php7.2-mongodb
 
 reboot_webserver_helper
+
+# The following is "sudo apt-get -y upgrade" without any prompts
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
+sudo apt-get -y dist-upgrade
 
 # /*================================
 # =            COMPOSER            =
