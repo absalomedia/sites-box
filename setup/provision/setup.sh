@@ -155,9 +155,12 @@ echo 'opache.enable = 0' | sudo tee -a $PHP_USER_INI_PATH
 sudo sed -i s,\;opcache.enable=0,opcache.enable=0,g /etc/php/7.2/apache2/php.ini
 reboot_webserver_helper
 
+sudo apt purge php7.1*
+sudo apt purge php5.6*
+
 # The following is "sudo apt-get -y upgrade" without any prompts
-#sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
-#sudo apt-get -y dist-upgrade
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
+sudo apt-get -y dist-upgrade
 
 # /*================================
 # =            PHP UNIT            =
