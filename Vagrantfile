@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
     config.vm.hostname = CONF['vm_hostname']
     config.hostmanager.aliases = Array.new
 
-    config.vbguest.auto_update = true
+    config.vbguest.auto_update = false
     
     config.ssh.username = CONF['ssh_username'] || "vagrant"
     config.ssh.password = CONF['ssh_password'] || "vagrant"
@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
       vb.customize ['modifyvm', :id, '--ioapic', 'on']
     end
 
-    config.vm.box = "scotch/box-pro"
+    config.vm.box = "scotch/box"
     config.vm.network "private_network", ip: CONF['vm_ip']
     config.vm.network :forwarded_port, guest: 3306, host: 3306, host_ip: "127.0.0.1"
     

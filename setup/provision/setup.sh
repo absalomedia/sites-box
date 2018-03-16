@@ -42,9 +42,6 @@ reboot_webserver_helper() {
 echo "Starting VM..."
 sudo apt-get -qq update
 
-# The following is "sudo apt-get -y upgrade" without any prompts
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
-
 sudo apt-get install -y build-essential
 sudo apt-get install -y tcl
 sudo apt-get install -y software-properties-common
@@ -53,7 +50,6 @@ sudo apt-get -y install vim
 sudo apt-get -y install dnsmasq
 sudo apt-get -y install locate
 sudo apt-get -y install git
-sudo apt-get -y dist-upgrade
 
 # Weird Vagrant issue fix
 sudo apt-get install -y ifupdown
@@ -159,6 +155,9 @@ echo 'opache.enable = 0' | sudo tee -a $PHP_USER_INI_PATH
 sudo sed -i s,\;opcache.enable=0,opcache.enable=0,g /etc/php/7.2/apache2/php.ini
 reboot_webserver_helper
 
+# The following is "sudo apt-get -y upgrade" without any prompts
+#sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
+#sudo apt-get -y dist-upgrade
 
 # /*================================
 # =            PHP UNIT            =
@@ -174,7 +173,7 @@ reboot_webserver_helper
 echo "Set up MySQL."
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
-sudo apt-get -y install mysql-server
+#sudo apt-get -y install mysql-server
 sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
 sudo apt-get -y install php7.2-mysql
@@ -289,7 +288,7 @@ sudo composer install
 # /*=============================
 # =            NGROK            =
 # =============================*/
-#sudo apt-get install ngrok-client
+sudo apt-get install ngrok-client
 
 # /*==============================
 # =            NODEJS            =
