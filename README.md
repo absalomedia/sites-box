@@ -43,7 +43,7 @@ These are some notes that might be helpful after you've done the setup. But you 
 * **Restart the virtual machine:** From the root of this repository, run `vagrant reload --provision`
 * **My sites aren't showing up in a browser:** Stop the VM and start it up again using `up` and `halt` as described above.
 * **Accessing sites via CLI within the VM:** From the root of this repository, run `vagrant ssh` (while the VM is running). That will log you in, just as if you ssh'd to a remote server. **The `sites/` directory where your virtual hosts are located is inside the VM at `/var/www/vhosts/`**. So, you can run `cd /var/www/vhosts` to get there.
-* **Connecting to the VM's database using a GUI in your host OS** (such as Sequel Pro): Specify an ssh connection and use the parameters below. Using a client like Sequel Pro will allow you to connect to MySQL and add/remove databases as you choose.
+* **Connecting to the VM's database using a GUI in your host OS** (such as Sequel Pro): Using a client like Sequel Pro will allow you to connect to MySQL and add/remove databases as you choose, using the following details:
     * MySQL Host: `127.0.0.1`
     * MySQL User: `root`
     * MySQL Password: `root`
