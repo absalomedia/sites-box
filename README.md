@@ -4,14 +4,15 @@ An extension of the [Scotch Box](https://box.scotch.io/) Vagrant lamp stack conf
 
 Includes:
 
-* Built off latest Scotch Box (version 1.5P)
+* Built off latest Scotch Box (version 3.5)
 * PHP 7.2
-* The latest [Phalcon](https://phalconphp.com/)
-* PostgreSQL [10](https://www.postgresql.org/) 
+* The latest [Phalcon] 3.3.x (https://phalconphp.com/)
+* PostgreSQL [10](https://www.postgresql.org/)
 * FTP access using [VSFTP](https://security.appspot.com/vsftpd.html)
 * [Drush](http://www.drush.org/) (7.4 for client compatibility with Drupal 7)
 * Ability to set multi core CPUs & increased VM memory
 * [Mailhog](https://github.com/mailhog/MailHog)
+* Microsoft Drivers for PHP for [SQL Server](https://github.com/Microsoft/msphpsql)
 * SSL enabled virtual hosts (self-signed based on config.yaml)
 * DNSMasq detection for Windows hosts
 * Latest edition of [MeteorJS](https://www.meteor.com) installed
@@ -43,10 +44,6 @@ These are some notes that might be helpful after you've done the setup. But you 
 * **My sites aren't showing up in a browser:** Stop the VM and start it up again using `up` and `halt` as described above.
 * **Accessing sites via CLI within the VM:** From the root of this repository, run `vagrant ssh` (while the VM is running). That will log you in, just as if you ssh'd to a remote server. **The `sites/` directory where your virtual hosts are located is inside the VM at `/var/www/vhosts/`**. So, you can run `cd /var/www/vhosts` to get there.
 * **Connecting to the VM's database using a GUI in your host OS** (such as Sequel Pro): Specify an ssh connection and use the parameters below. Using a client like Sequel Pro will allow you to connect to MySQL and add/remove databases as you choose.
-    * SSH Host: `192.168.33.10` (unless you used a different value in your `config.yaml`)
-    * SSH User: `vagrant`
-    * SSH Password: `vagrant`
-    * SSH Port: *Leave empty or use* `22`
     * MySQL Host: `127.0.0.1`
     * MySQL User: `root`
     * MySQL Password: `root`
