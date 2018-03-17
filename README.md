@@ -6,7 +6,7 @@ Includes:
 
 * Built off latest Scotch Box (version 3.5)
 * PHP 7.2
-* The latest [Phalcon] 3.3.x (https://phalconphp.com/)
+* The latest [Phalcon 3.3.x](https://phalconphp.com/)
 * PostgreSQL [10](https://www.postgresql.org/)
 * FTP access using [VSFTP](https://security.appspot.com/vsftpd.html)
 * [Drush](http://www.drush.org/) (7.4 for client compatibility with Drupal 7)
@@ -18,7 +18,7 @@ Includes:
 * Latest edition of [MeteorJS](https://www.meteor.com) installed
 * Latest edition of [Reaction Commerce](https://reactioncommerce.com/) installed
 * Apache virtual host directory now customised in config.yaml file
-* MariaDB upgrade from standard MySQL & custom configuration with UFT8 encoded database setup
+* MySQL 5.7 custom configuration with utf8mb4 encoded database setup
 * MySQL data directory is now a synced folder to stop you losing data on when Vagrant image is destroyed
 * MySQL synced folder now customised in config.yaml file
 * Simplified MySQL access - it's now seen as local instead of the standard SSH connection
@@ -29,7 +29,6 @@ Setup requires:
 * VirtualBox ([binaries available here](https://www.virtualbox.org/wiki/Downloads))
 * Vagrant ([binaries available here](http://www.vagrantup.com/downloads.html))
 * OS-X (for DNS Masq)
-* XCode (and it's developer tools)
 * Homebrew
 
 - - -
