@@ -186,6 +186,7 @@ sudo mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFI
 sudo wget -P /etc/mysql/mysql.conf.d/ https://gist.githubusercontent.com/Xeoncross/2d0503cee10a6374c627f0faaed9ea3f/raw/755f53a68770a31b4b56c14e11e944e9facb10b5/utf8mb4.cnf
 sudo apt-get -y install php7.2-mysql
 service mysql restart
+sudo apt-mark hold mysql-server mysql-client
 reboot_webserver_helper
 
 echo "Setting up PostGres 10"
@@ -358,7 +359,7 @@ sudo apt-get -y install ruby-dev
 
 # Use RVM though to make life easy
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-\curl -sSL https://get.rvm.io | bash -s stable
+curl -sSL https://get.rvm.io | bash -s stable
 source ~/.rvm/scripts/rvm
 rvm install 2.5.0
 rvm use 2.5.0
