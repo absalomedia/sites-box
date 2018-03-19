@@ -162,9 +162,9 @@ echo 'opache.enable = 0' | sudo tee -a $PHP_USER_INI_PATH
 sudo sed -i s,\;opcache.enable=0,opcache.enable=0,g /etc/php/7.2/apache2/php.ini
 reboot_webserver_helper
 
-sudo apt purge php7.1*
-sudo apt purge php7.0*
-sudo apt purge php5.6*
+sudo apt purge -y php7.1*
+sudo apt purge -y php7.0*
+sudo apt purge -y php5.6*
 sudo apt autoremove -y
 
 # /*================================
@@ -186,7 +186,6 @@ sudo mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFI
 sudo wget -P /etc/mysql/mysql.conf.d/ https://gist.githubusercontent.com/Xeoncross/2d0503cee10a6374c627f0faaed9ea3f/raw/755f53a68770a31b4b56c14e11e944e9facb10b5/utf8mb4.cnf
 sudo apt-get -y install php7.2-mysql
 service mysql restart
-sudo apt-mark hold mysql-server mysql-client
 reboot_webserver_helper
 
 echo "Setting up PostGres 10"
