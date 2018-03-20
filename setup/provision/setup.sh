@@ -46,12 +46,13 @@ sudo apt purge -y php7.1*
 sudo apt purge -y php7.0*
 sudo apt purge -y php5.6*
 sudo apt purge -y mysql*
-sudo rm /var/lib/mysql/*
-sudo rm /var/lib/mysql/.*
+sudo apt-mark hold mysql-server
+sudo apt-mark hold mysql-client
+sudo apt-mark hold mysql-common
+
 
 # The following is "sudo apt-get -y upgrade" without any prompts
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
-sudo apt-get -y dist-upgrade
 
 sudo apt-get install -y build-essential
 sudo apt-get install -y tcl
@@ -187,7 +188,6 @@ reboot_webserver_helper
 echo "Set up MySQL."
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
-sudo apt-get install mysql-server mysql-client
 sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
 sudo wget -P /etc/mysql/mysql.conf.d/ https://gist.githubusercontent.com/Xeoncross/2d0503cee10a6374c627f0faaed9ea3f/raw/755f53a68770a31b4b56c14e11e944e9facb10b5/utf8mb4.cnf
@@ -237,24 +237,23 @@ sudo apt-get -y install sqlite
 sudo apt-get -y install php7.2-sqlite3
 reboot_webserver_helper
 
-
 # /*===============================
 # =            MONGODB            =
 # ===============================*/
-sudo apt-get -qq update
-sudo apt-get install -y mongodb
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+sudo apt-get update
+sudo apt-get install -y mongodb-org
 
 sudo tee /lib/systemd/system/mongod.service  <<EOL
 [Unit]
 Description=High-performance, schema-free document-oriented database
 After=network.target
 Documentation=https://docs.mongodb.org/manual
-
 [Service]
 User=mongodb
 Group=mongodb
 ExecStart=/usr/bin/mongod --quiet --config /etc/mongod.conf
-
 [Install]
 WantedBy=multi-user.target
 EOL
@@ -262,7 +261,7 @@ sudo systemctl enable mongod
 sudo service mongod start
 
 # Enable it for PHP
-# sudo pecl install mongodb
+sudo pecl install mongodb
 sudo apt-get install -y php7.2-mongodb
 
 reboot_webserver_helper
