@@ -45,14 +45,25 @@ sudo apt-get -qq update
 sudo apt purge -y php7.1*
 sudo apt purge -y php7.0*
 sudo apt purge -y php5.6*
-sudo apt purge -y mysql*
-sudo apt-mark hold mysql-server
-sudo apt-mark hold mysql-client
-sudo apt-mark hold mysql-common
+sudo systemctl stop postgresql
+sudo apt purge -y postgresql-9.5* 
+sudo apt purge -y golang-1.8*
 
-
-# The following is "sudo apt-get -y upgrade" without any prompts
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
+# /*=============================
+# =            MYSQL            =
+# =============================*/
+echo "Set up MySQL."
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
+sudo rm /var/lib/mysql/*
+sudo apt-get install mysql-server
+sudo mysqld  --initialize-insecure 
+sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
+sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
+sudo wget -P /etc/mysql/mysql.conf.d/ https://gist.githubusercontent.com/Xeoncross/2d0503cee10a6374c627f0faaed9ea3f/raw/755f53a68770a31b4b56c14e11e944e9facb10b5/utf8mb4.cnf
+sudo mysqladmin -uroot create scotchbox
+service mysql restart
+reboot_webserver_helper
 
 sudo apt-get install -y build-essential
 sudo apt-get install -y tcl
@@ -62,6 +73,8 @@ sudo apt-get -y install vim
 sudo apt-get -y install dnsmasq
 sudo apt-get -y install locate
 sudo apt-get -y install git
+sudo apt-get -y upgrade
+
 
 # Weird Vagrant issue fix
 sudo apt-get install -y ifupdown
@@ -120,6 +133,7 @@ sudo apt-get -y install php7.2-readline
 sudo apt-get -y install php7.2-igbinary
 sudo apt-get -y install php7.2-memcache 
 sudo apt-get -y install php7.2-memcached 
+sudo apt-get -y install php7.2-mysql
 
 # Enchant
 sudo apt-get -y install libenchant-dev
@@ -182,21 +196,6 @@ sudo chmod +x phpunit-7.0.2.phar
 sudo mv phpunit-7.0.2.phar /usr/local/bin/phpunit
 reboot_webserver_helper
 
-# /*=============================
-# =            MYSQL            =
-# =============================*/
-echo "Set up MySQL."
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
-sudo apt-get install -y mysql-server
-sudo rm /var/lib/mysql/*
-sudo mysqld --intialize
-sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
-sudo mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
-sudo wget -P /etc/mysql/mysql.conf.d/ https://gist.githubusercontent.com/Xeoncross/2d0503cee10a6374c627f0faaed9ea3f/raw/755f53a68770a31b4b56c14e11e944e9facb10b5/utf8mb4.cnf
-sudo apt-get -y install php7.2-mysql
-service mysql restart
-reboot_webserver_helper
 
 echo "Setting up PostGres 10"
 # /*=================================
@@ -213,7 +212,6 @@ sudo systemctl stop postgresql
 sudo pg_dropcluster 10 main --stop
 sudo pg_upgradecluster -m upgrade 9.5 main
 sudo pg_dropcluster 9.5 main --stop
-sudo apt purge postgresql-9.5 
 sudo systemctl start postgresql
 reboot_webserver_helper
 
@@ -522,6 +520,18 @@ VIRTUALHOSTCONF
 
 done
 
+# Add 1GB swap for memory overflow
+sudo fallocate -l 1024M /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo "/swapfile   none    swap    sw    0   0" | sudo tee -a /etc/fstab
+printf "vm.swappiness=10\nvm.vfs_cache_pressure=50" | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
+# Allow caching of NFS file share
+sudo apt-get install -y cachefilesd
+echo "RUN=yes" | sudo tee /etc/default/cachefilesd
+
 # /*=======================================
 # =            WELCOME MESSAGE            =
 # =======================================*/
@@ -537,7 +547,7 @@ echo "$WELCOME_MESSAGE" | sudo tee /etc/motd
 # =            FINAL GOOD MEASURE, WHY NOT            =
 # ===================================================*/
 sudo apt-get -qq update
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
+sudo apt-get -y upgrade
 reboot_webserver_helper
 
 # /*====================================
