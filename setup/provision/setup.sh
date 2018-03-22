@@ -72,8 +72,7 @@ sudo apt-get -y install vim
 sudo apt-get -y install dnsmasq
 sudo apt-get -y install locate
 sudo apt-get -y install git
-sudo apt-get -y upgrade
-
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 
 # Weird Vagrant issue fix
 sudo apt-get install -y ifupdown
@@ -548,7 +547,7 @@ echo "$WELCOME_MESSAGE" | sudo tee /etc/motd
 sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
 sudo service mysql restart
 sudo apt-get -qq update
-sudo apt-get -y upgrade
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 reboot_webserver_helper
 
 # /*====================================
