@@ -55,6 +55,9 @@ sudo apt purge -y golang-1.8*
 echo "Set up MySQL."
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
+file="/var/lib/mysql/auto.cnf"
+if [ -f "$file" ]
+then
 sudo rm /var/lib/mysql/*
 sudo apt-get install mysql-server
 sudo mysqld  --initialize-insecure 
@@ -63,6 +66,7 @@ sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'' IDENTIFIED BY 'r
 sudo wget -P /etc/mysql/mysql.conf.d/ https://gist.githubusercontent.com/Xeoncross/2d0503cee10a6374c627f0faaed9ea3f/raw/755f53a68770a31b4b56c14e11e944e9facb10b5/utf8mb4.cnf
 service mysql restart
 reboot_webserver_helper
+fi
 
 sudo apt-get install -y build-essential
 sudo apt-get install -y tcl
@@ -93,6 +97,7 @@ reboot_webserver_helper
 echo "Updating PHP"
 sudo add-apt-repository -y ppa:ondrej/php # Super Latest Version (currently 7.2)
 sudo apt-get -qq update
+if ! type php7.2 > /dev/null; then
 sudo apt-get install -y php7.2
 sudo apt-get -y install libapache2-mod-php
 
@@ -161,6 +166,8 @@ sudo echo "extension=phalcon.so" > /etc/php/7.2/mods-available/phalcon.ini
 cd ../../ && sudo rm -rf cphalcon
 fi
 
+fi
+
 # /*===========================================
 # =            CUSTOM PHP SETTINGS            =
 # ===========================================*/
@@ -194,7 +201,7 @@ sudo chmod +x phpunit-7.0.2.phar
 sudo mv phpunit-7.0.2.phar /usr/local/bin/phpunit
 reboot_webserver_helper
 
-
+if ! type postgresql-10 > /dev/null; then
 echo "Setting up PostGres 10"
 # /*=================================
 # =            PostreSQL            =
@@ -212,7 +219,9 @@ sudo pg_upgradecluster -m upgrade 9.5 main
 sudo pg_dropcluster 9.5 main --stop
 sudo systemctl start postgresql
 reboot_webserver_helper
+fi
 
+if ! type msodbcsql > /dev/null; then
 echo "Setting up Microsoft SQL connector"
 # /*=================================
 # =            NMSSQL              =
@@ -228,13 +237,16 @@ sudo pecl install pdo_sqlsrv
 sudo bash -c "echo extension=sqlsrv.so > /etc/php7.2/conf.d/sqlsrv.ini"
 sudo bash -c "echo extension=pdo_sqlsrv.so > /etc/php7.2/conf.d/pdo_sqlsrv.ini"
 reboot_webserver_helper
+fi
 
+if ! type sqlite > /dev/null; then
 # /*==============================
 # =            SQLITE            =
 # ===============================*/
 sudo apt-get -y install sqlite
 sudo apt-get -y install php7.2-sqlite3
 reboot_webserver_helper
+if
 
 # /*===============================
 # =            MONGODB            =
@@ -284,10 +296,12 @@ sudo a2enmod http2
 composer g require psy/psysh:@stable
 composer g require friendsofphp/php-cs-fixer
 
+if ! type beanstalkd > /dev/null; then
 # /*==================================
 # =            BEANSTALKD            =
 # ==================================*/
 sudo apt-get -y install beanstalkd
+fi
 
 # /*==============================
 # =            WP-CLI            =
@@ -310,12 +324,14 @@ cd /usr/local/src/drush
 sudo git checkout 7.4.0  #or whatever version you want.
 sudo ln -s /usr/local/src/drush/drush /usr/bin/drush
 sudo composer install
+reboot_webserver_helper
 
-
+if ! type ngrok-client > /dev/null; then
 # /*=============================
 # =            NGROK            =
 # =============================*/
 sudo apt-get install ngrok-client
+fi
 
 # /*==============================
 # =            NODEJS            =
@@ -368,14 +384,16 @@ gem update
 gem install net-sftp net-ssh
 gem clean
 
-
+if ! type redis-server > /dev/null; then
 # /*=============================
 # =            REDIS            =
 # =============================*/
 sudo apt-get -y install redis-server
 sudo apt-get -y install php7.2-redis
 reboot_webserver_helper
+fi
 
+if ! type memcached > /dev/null; then
 # /*=================================
 # =            MEMCACHED            =
 # =================================*/
@@ -383,6 +401,7 @@ sudo apt-get -y install memcached
 sudo apt-get -y install php7.2-memcached
 sudo phpenmod memcache
 sudo phpenmod memcached
+if
 
 reboot_webserver_helper
 
@@ -545,6 +564,8 @@ echo "$WELCOME_MESSAGE" | sudo tee /etc/motd
 # =            FINAL GOOD MEASURE, WHY NOT            =
 # ===================================================*/
 sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
+DEBMAN  = $('sudo grep "password =" /etc/mysql/debian.cnf | cut -d = -f 2 | xargs | cut -d " " -f1')
+sudo mysql -u root -e "GRANT ALL PRIVILEGES on *.* TO debian-sys-maint@localhost IDENTIFIED BY PASSWORD '$(DEBMAN)' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 sudo service mysql restart
 sudo apt-get -qq update
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
