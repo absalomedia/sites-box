@@ -398,7 +398,6 @@ fi
 sudo apt-get -y install ruby
 sudo apt-get -y install ruby-dev
 
-if [ ! -f "/etc/profile.d/rvm.sh" ] then
 # Use RVM though to make life easy
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 curl -sSL https://get.rvm.io | bash -s stable
@@ -409,7 +408,6 @@ rvm use 2.5.0
 gem update
 gem install net-sftp net-ssh
 gem clean
-fi
 
 $pkg='redis-server'
 if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
