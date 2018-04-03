@@ -48,6 +48,9 @@ sudo apt purge -y php5.6*
 sudo systemctl stop postgresql
 sudo apt purge -y postgresql-9.5* 
 sudo apt purge -y golang-1.8*
+sudo apt-key del 72ECF46A56B4AD39C907BBB71646B01B86E50310
+sudo wget -qO - https://raw.githubusercontent.com/yarnpkg/releases/gh-pages/debian/pubkey.gpg | sudo apt-key add -
+
 
 # /*=============================
 # =            MYSQL            =
@@ -55,18 +58,18 @@ sudo apt purge -y golang-1.8*
 echo "Set up MySQL."
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
-file="/var/lib/mysql/auto.cnf"
-if [ -f "$file" ]
-then
+
 sudo rm /var/lib/mysql/*
 sudo apt-get install mysql-server
 sudo mysqld  --initialize-insecure 
 sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
+if [ ! -f "/etc/mysql/mysql.conf.d/utf8mb4.cnf" ]
+then
 sudo wget -P /etc/mysql/mysql.conf.d/ https://gist.githubusercontent.com/Xeoncross/2d0503cee10a6374c627f0faaed9ea3f/raw/755f53a68770a31b4b56c14e11e944e9facb10b5/utf8mb4.cnf
+fi
 service mysql restart
 reboot_webserver_helper
-fi
 
 sudo apt-get install -y build-essential
 sudo apt-get install -y tcl
@@ -97,7 +100,9 @@ reboot_webserver_helper
 echo "Updating PHP"
 sudo add-apt-repository -y ppa:ondrej/php # Super Latest Version (currently 7.2)
 sudo apt-get -qq update
-if ! type php7.2 > /dev/null; then
+
+$pkg='php7.2'
+if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
 sudo apt-get install -y php7.2
 sudo apt-get -y install libapache2-mod-php
 
@@ -156,7 +161,8 @@ sudo apt-get -y install php7.2-imagick
 
 reboot_webserver_helper
 
-if ! type re2c > /dev/null; then
+$pkg='re2c'
+if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
 echo "Adding Phalcon to PHP"
 # Phalcon
 sudo apt-get -y install re2c
@@ -201,7 +207,8 @@ sudo chmod +x phpunit-7.0.2.phar
 sudo mv phpunit-7.0.2.phar /usr/local/bin/phpunit
 reboot_webserver_helper
 
-if ! type postgresql-10 > /dev/null; then
+$pkg='postgresql-10'
+if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
 echo "Setting up PostGres 10"
 # /*=================================
 # =            PostreSQL            =
@@ -218,10 +225,11 @@ sudo pg_dropcluster 10 main --stop
 sudo pg_upgradecluster -m upgrade 9.5 main
 sudo pg_dropcluster 9.5 main --stop
 sudo systemctl start postgresql
-reboot_webserver_helper
 fi
+reboot_webserver_helper
 
-if ! type msodbcsql > /dev/null; then
+$pkg='unixodbc-dev'
+if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
 echo "Setting up Microsoft SQL connector"
 # /*=================================
 # =            NMSSQL              =
@@ -236,18 +244,21 @@ sudo pecl install sqlsrv
 sudo pecl install pdo_sqlsrv
 sudo bash -c "echo extension=sqlsrv.so > /etc/php7.2/conf.d/sqlsrv.ini"
 sudo bash -c "echo extension=pdo_sqlsrv.so > /etc/php7.2/conf.d/pdo_sqlsrv.ini"
-reboot_webserver_helper
 fi
+reboot_webserver_helper
 
-if ! type sqlite > /dev/null; then
+$pkg='sqlite3'
+if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
 # /*==============================
 # =            SQLITE            =
 # ===============================*/
 sudo apt-get -y install sqlite
 sudo apt-get -y install php7.2-sqlite3
+fi
 reboot_webserver_helper
-if
 
+if [ ! -f "/lib/systemd/system/mongod.service" ]
+then
 # /*===============================
 # =            MONGODB            =
 # ===============================*/
@@ -274,7 +285,7 @@ sudo service mongod start
 # Enable it for PHP
 sudo pecl install mongodb
 sudo apt-get install -y php7.2-mongodb
-
+if
 reboot_webserver_helper
 
 # /*================================
@@ -296,7 +307,8 @@ sudo a2enmod http2
 composer g require psy/psysh:@stable
 composer g require friendsofphp/php-cs-fixer
 
-if ! type beanstalkd > /dev/null; then
+$pkg='beanstalkd'
+if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
 # /*==================================
 # =            BEANSTALKD            =
 # ==================================*/
@@ -306,9 +318,12 @@ fi
 # /*==============================
 # =            WP-CLI            =
 # ==============================*/
+if [ ! -f "/usr/local/bin/wp" ]
+then
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 sudo chmod +x wp-cli.phar
 sudo mv wp-cli.phar /usr/local/bin/wp
+if
 
 # /*=============================
 # =            DRUSH            =
@@ -318,15 +333,21 @@ sudo mv wp-cli.phar /usr/local/bin/wp
 #sudo mv drush.phar /usr/local/bin/drush
 
 #Better drush
+$pkg='drush'
+if [ ! -f "/usr/local/src/drush" ]
+then
 sudo apt-get remove drush
 sudo git clone https://github.com/drush-ops/drush.git /usr/local/src/drush
 cd /usr/local/src/drush
 sudo git checkout 7.4.0  #or whatever version you want.
 sudo ln -s /usr/local/src/drush/drush /usr/bin/drush
 sudo composer install
+fi
 reboot_webserver_helper
 
-if ! type ngrok-client > /dev/null; then
+
+$pkg='ngrok-client'
+if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
 # /*=============================
 # =            NGROK            =
 # =============================*/
@@ -339,6 +360,8 @@ fi
 sudo apt-get -y install nodejs
 sudo apt-get -y install npm
 
+if [ ! -f "/home/vagrant/.nvm/nvm.sh" ]
+then
 # Use NVM though to make life easy
 wget -qO- https://raw.github.com/creationix/nvm/master/install.sh | bash
 source ~/.nvm/nvm.sh
@@ -356,11 +379,13 @@ sudo npm install -g browser-sync
 sudo npm install -g browserify
 sudo npm install -g pm2
 sudo npm install -g webpack
+fi
 
 # /*============================
 # =            YARN            =
 # ============================*/
-if ! type yarn > /dev/null; then
+$pkg='yarn'
+if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt-get -qq update
@@ -373,6 +398,7 @@ fi
 sudo apt-get -y install ruby
 sudo apt-get -y install ruby-dev
 
+if [ ! -f "/etc/profile.d/rvm.sh" ] then
 # Use RVM though to make life easy
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 curl -sSL https://get.rvm.io | bash -s stable
@@ -383,8 +409,10 @@ rvm use 2.5.0
 gem update
 gem install net-sftp net-ssh
 gem clean
+fi
 
-if ! type redis-server > /dev/null; then
+$pkg='redis-server'
+if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
 # /*=============================
 # =            REDIS            =
 # =============================*/
@@ -393,7 +421,8 @@ sudo apt-get -y install php7.2-redis
 reboot_webserver_helper
 fi
 
-if ! type memcached > /dev/null; then
+$pkg='memcached'
+if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
 # /*=================================
 # =            MEMCACHED            =
 # =================================*/
@@ -419,6 +448,8 @@ fi
 # /*===============================
 # =            MAILHOG            =
 # ===============================*/
+if [ ! -f "/etc/systemd/system/mailhog.service" ]
+then
 sudo wget --quiet -O ~/mailhog https://github.com/mailhog/MailHog/releases/download/v1.0.0/MailHog_linux_amd64
 sudo chmod +x ~/mailhog
 
@@ -443,13 +474,15 @@ sudo ln ~/go/bin/mhsendmail /usr/bin/sendmail
 sudo ln ~/go/bin/mhsendmail /usr/bin/mail
 
 echo 'sendmail_path = /usr/bin/mhsendmail' | sudo tee -a /etc/php/7.2/apache2/conf.d/user.ini
+fi
 
 reboot_webserver_helper
 
 # /*===============================
 # =            VSFTPD            =
 # ===============================*/
-if ! type vsftpd > /dev/null; then
+if [ ! -f "/etc/vsftpd.conf" ]
+then
 echo "Added and enabled VSFTPD. Restarting VSFTPD..."
 sudo apt-get install vsftpd
 sudo wget https://gist.github.com/anonymous/1204611 /etc/vsftpd.conf
