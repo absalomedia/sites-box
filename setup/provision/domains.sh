@@ -30,8 +30,11 @@ for ((i=0; i < ${#DOMAINS_ARR[@]}; i++)); do
     echo "Creating SSL config for $DOMAIN..."
     mkdir -p /var/www/vhosts/$DOMAIN/certs
     cd /var/www/vhosts/$DOMAIN/certs
+    if [ ! -f "/var/www/vhosts/$DOMAIN/certs/$DOMAIN.cert" ]
+    then
     openssl genrsa -out $DOMAIN.key 2048
     openssl req -new -x509 -sha256 -key $DOMAIN.key -out $DOMAIN.cert -days 3650 -subj /CN=$DOMAIN
+    fi
     echo "Creating vhost config for $DOMAIN..."
     cat << VIRTUALHOSTCONF > /etc/apache2/sites-available/$DOMAIN.conf
 <VirtualHost *:80>

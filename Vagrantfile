@@ -55,10 +55,10 @@ Vagrant.configure("2") do |config|
     config.vm.provision "shell", path: "setup/provision/mysql.sh", run: "always"
     config.vm.provision "shell", path: "setup/provision/core.sh"
 
-    config.vm.provision "shell" do |s|
+    config.vm.provision "shell", run: "always" do |s|
       s.args = vhosts + " " + CONF['vm_ip'] + " " + config.vm.hostname
-      s.path = "setup/provision/domains.sh"         
-    end
+      s.path = "setup/provision/domains.sh"
+    end 
 
     config.vm.provision "shell", path: "setup/provision/final.sh", run: "always"
 
