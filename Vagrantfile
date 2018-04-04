@@ -52,7 +52,7 @@ Vagrant.configure("2") do |config|
     # to pass into the shell script.
     vhosts = '"' + config.hostmanager.aliases.join(",") + '"';
 
-    config.vm.provision "shell", path: "setup/provision/mysql.sh", run: "always"
+    config.vm.provision "shell", path: "setup/provision/mysql.sh"
     config.vm.provision "shell", path: "setup/provision/core.sh"
 
     config.vm.provision "shell", run: "always" do |s|
