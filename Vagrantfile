@@ -52,10 +52,15 @@ Vagrant.configure("2") do |config|
     # to pass into the shell script.
     vhosts = '"' + config.hostmanager.aliases.join(",") + '"';
 
+    config.vm.provision "shell", path: "setup/provision/mysql.sh", run: "always"
+    config.vm.provision "shell", path: "setup/provision/core.sh"
+
     config.vm.provision "shell" do |s|
       s.args = vhosts + " " + CONF['vm_ip'] + " " + config.vm.hostname
-      s.path = "setup/provision/setup.sh"          
+      s.path = "setup/provision/domains.sh"         
     end
+
+    config.vm.provision "shell", path: "setup/provision/final.sh", run: "always"
 
     # This is a temporary hack to address sites not loading after the
     # host machine sleeps or is halted and started back up.
