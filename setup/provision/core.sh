@@ -14,15 +14,6 @@ reboot_webserver_helper() {
 echo "Building VM..."
 sudo apt-get -qq update
 
-sudo apt purge -y php7.1*
-sudo apt purge -y php7.0*
-sudo apt purge -y php5.6*
-sudo systemctl stop postgresql
-sudo apt purge -y postgresql-9.5* 
-sudo apt purge -y golang-1.8*
-sudo apt-key del 72ECF46A56B4AD39C907BBB71646B01B86E50310
-sudo wget -qO - https://raw.githubusercontent.com/yarnpkg/releases/gh-pages/debian/pubkey.gpg | sudo apt-key add -
-
 sudo apt-get install -y build-essential
 sudo apt-get install -y tcl
 sudo apt-get install -y software-properties-common
@@ -31,7 +22,6 @@ sudo apt-get -y install vim
 sudo apt-get -y install dnsmasq
 sudo apt-get -y install locate
 sudo apt-get -y install git
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 
 # Weird Vagrant issue fix
 sudo apt-get install -y ifupdown
