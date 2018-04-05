@@ -63,8 +63,6 @@ echo "$WELCOME_MESSAGE" | sudo tee /etc/motd
 # =            FINAL GOOD MEASURE, WHY NOT            =
 # ===================================================*/
 sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
-DEBMAN  = $('sudo grep "password =" /etc/mysql/debian.cnf | cut -d = -f 2 | xargs | cut -d " " -f1')
-sudo mysql -u root -e "GRANT ALL PRIVILEGES on *.* TO debian-sys-maint@localhost IDENTIFIED BY PASSWORD '$(DEBMAN)' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 sudo service mysql restart
 sudo apt-get -qq update
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade

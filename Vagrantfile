@@ -60,7 +60,7 @@ Vagrant.configure("2") do |config|
       s.path = "setup/provision/domains.sh"
     end 
 
-    config.vm.provision "shell", path: "setup/provision/final.sh", run: "always"
+    config.vm.provision "shell", path: "setup/provision/final.sh"
 
     # This is a temporary hack to address sites not loading after the
     # host machine sleeps or is halted and started back up.
