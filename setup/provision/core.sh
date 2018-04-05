@@ -13,6 +13,7 @@ reboot_webserver_helper() {
 
 echo "Building VM..."
 sudo apt-get -qq update
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 
 sudo apt-get install -y build-essential
 sudo apt-get install -y tcl
@@ -189,14 +190,11 @@ sudo bash -c "echo extension=pdo_sqlsrv.so > /etc/php7.2/conf.d/pdo_sqlsrv.ini"
 fi
 reboot_webserver_helper
 
-$pkg='sqlite3'
-if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
 # /*==============================
 # =            SQLITE            =
 # ===============================*/
 sudo apt-get -y install sqlite
 sudo apt-get -y install php7.2-sqlite3
-fi
 reboot_webserver_helper
 
 if [ ! -f "/lib/systemd/system/mongod.service" ]
