@@ -29,7 +29,7 @@ Setup requires:
 * VirtualBox ([binaries available here](https://www.virtualbox.org/wiki/Downloads))
 * Vagrant ([binaries available here](http://www.vagrantup.com/downloads.html))
 * OS-X (for DNS Masq)
-* Homebrew
+* Homebrew (if running on OSX)
 
 - - -
 
