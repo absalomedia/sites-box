@@ -49,7 +49,7 @@ These are some notes that might be helpful after you've done the setup. But you 
     * MySQL Port: `3306`
 * **Creating/connecting to a database in the VM:** Say you're developing a WordPress site and need to create a new database and set the connection information in the `wp-config.php` file -- you can use a GUI like Sequel Pro as described above to connect to MySQL then freely create databases as needed. Make a note of the name you use for your project's database, then reference it in your `wp-config.php` database settings (as `DB_NAME`). The other database settings would be:
     * `DB_USER`: `root`
-    * `DB_PASSWORD`: `root`
+    * `DB_PASSWORD`: ``
     * `DB_HOST`: `localhost`
 * **Upgrading:** The virtual machine itself is Scotch Box, and you may get a message that Scotch Box is out of date. To update it, run `vagrant box update` from the root of this repository. Then run `vagrant up` (or, if already running, `vagrant reload`).
 
