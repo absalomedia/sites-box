@@ -94,8 +94,6 @@ Most of the setup is to get dnsmasq setup on your host machine. It's not strictl
 ### Setup the virtual machine
 
 * Use a terminal to `cd` into the root of this project.
-* Install the Hostmanager Vagrant plugin with `vagrant plugin install vagrant-hostmanager`
-* Install Vagrant Guest Updates: `vagrant plugin install vagrant-vbguest`
 * Make a copy of `config.example.yaml` and rename it `config.yaml`
 * Customize `config.yaml` as needed (it's well-commented).
 * If using Sites Box on Windows, remember to modify your %SystemRoot%\System32\drivers\etc\hosts files with site list you created
