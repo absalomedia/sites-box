@@ -24,9 +24,10 @@ sudo mysqld  --initialize-insecure
 sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo service mysql restart
 sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
+sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'debian-sys-maint'@'localhost' IDENTIFIED BY 'pC52BiU2Ghq3bnXY';"
 if [ ! -f "/etc/mysql/mysql.conf.d/utf8mb4.cnf" ]
 then
 sudo wget -P /etc/mysql/mysql.conf.d/ https://gist.githubusercontent.com/Xeoncross/2d0503cee10a6374c627f0faaed9ea3f/raw/755f53a68770a31b4b56c14e11e944e9facb10b5/utf8mb4.cnf
 fi
 sudo service mysql restart
-sudo apt-mark hold mysql-server mysql-common mysql-server-5.7
+#sudo apt-mark hold mysql-server mysql-common mysql-server-5.7
