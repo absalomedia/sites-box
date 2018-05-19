@@ -18,7 +18,7 @@ echo "Set up MySQL."
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
 
-sudo rm /var/lib/mysql/*
+#sudo rm /var/lib/mysql/*
 sudo apt-get install mysql-server
 sudo mysqld  --initialize-insecure 
 sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
