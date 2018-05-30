@@ -22,7 +22,7 @@ Includes:
 * MySQL data directory is now a synced folder to stop you losing data on when Vagrant image is destroyed
 * MySQL synced folder now customised in config.yaml file
 * Simplified MySQL access - it's now seen as local instead of the standard SSH connection
-
+* Database backup & restore scripts
 
 Setup requires:
 
@@ -31,7 +31,7 @@ Setup requires:
 * OS-X (for DNS Masq)
 * Homebrew (if running on OSX)
 
-- - -
+---
 
 ## Quick reference
 
@@ -43,17 +43,17 @@ These are some notes that might be helpful after you've done the setup. But you 
 * **My sites aren't showing up in a browser:** Stop the VM and start it up again using `up` and `halt` as described above.
 * **Accessing sites via CLI within the VM:** From the root of this repository, run `vagrant ssh` (while the VM is running). That will log you in, just as if you ssh'd to a remote server. **The `sites/` directory where your virtual hosts are located is inside the VM at `/var/www/vhosts/`**. So, you can run `cd /var/www/vhosts` to get there.
 * **Connecting to the VM's database using a GUI in your host OS** (such as Sequel Pro): Using a client like Sequel Pro will allow you to connect to MySQL and add/remove databases as you choose, using the following details:
-    * MySQL Host: `127.0.0.1`
-    * MySQL User: `root`
-    * MySQL Password: `root`
-    * MySQL Port: `3306`
+  * MySQL Host: `127.0.0.1`
+  * MySQL User: `root`
+  * MySQL Password: `root`
+  * MySQL Port: `3306`
 * **Creating/connecting to a database in the VM:** Say you're developing a WordPress site and need to create a new database and set the connection information in the `wp-config.php` file -- you can use a GUI like Sequel Pro as described above to connect to MySQL then freely create databases as needed. Make a note of the name you use for your project's database, then reference it in your `wp-config.php` database settings (as `DB_NAME`). The other database settings would be:
-    * `DB_USER`: `root`
-    * `DB_PASSWORD`: ``
-    * `DB_HOST`: `localhost`
+  * `DB_USER`: `root`
+  * `DB_PASSWORD`: ``
+  * `DB_HOST`: `localhost`
 * **Upgrading:** The virtual machine itself is Scotch Box, and you may get a message that Scotch Box is out of date. To update it, run `vagrant box update` from the root of this repository. Then run `vagrant up` (or, if already running, `vagrant reload`).
 
-- - -
+---
 
 ## Setup
 
@@ -89,7 +89,6 @@ Most of the setup is to get dnsmasq setup on your host machine. It's not strictl
   sudo launchctl stop homebrew.mxcl.dnsmasq
   sudo launchctl start homebrew.mxcl.dnsmasq
   ```
-
 
 ### Setup the virtual machine
 
