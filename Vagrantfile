@@ -4,7 +4,7 @@
 require "yaml"
 require File.dirname(__FILE__)+"/setup/provision/dependency_manager"
 
-check_plugins ["vagrant-vbguest", "vagrant-hostmanager","vagrant-winnfsd"]
+check_plugins ["vagrant-vbguest", "vagrant-hostmanager","vagrant-winnfsd","vagrant-triggers"]
 
 CONF = YAML.load(File.open(File.join(File.dirname(__FILE__), "config.yaml"), File::RDONLY).read)
 
@@ -76,4 +76,11 @@ Vagrant.configure("2") do |config|
     if Vagrant.has_plugin?("vagrant-hostmanager")
       config.vm.provision :hostmanager
     end
+
+    # BACKUP MYSQL DATABASES
+    config.trigger.before :destroy do
+      info "Dumping the databases before destroying the VM..."
+      run_remote  "cd /var/www/vhosts && bash dbbackup.sh"
+    end
+
 end
