@@ -4,7 +4,11 @@
 require "yaml"
 require File.dirname(__FILE__)+"/setup/provision/dependency_manager"
 
-check_plugins ["vagrant-vbguest", "vagrant-hostmanager","vagrant-winnfsd"]
+check_plugins ["vagrant-vbguest", "vagrant-hostmanager"]
+
+if Vagrant::Util::Platform.windows? then
+  check_plugins ["vagrant-winnfsd"]
+end
 
 CONF = YAML.load(File.open(File.join(File.dirname(__FILE__), "config.yaml"), File::RDONLY).read)
 

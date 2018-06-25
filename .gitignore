@@ -2,7 +2,7 @@
 .vagrant
 
 # Ignore the local config.
-/config.yaml
+config.yaml
 
 # Ignore the sites directory.
 /sites/*
