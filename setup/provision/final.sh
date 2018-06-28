@@ -48,6 +48,9 @@ printf "vm.swappiness=10\nvm.vfs_cache_pressure=50" | sudo tee -a /etc/sysctl.co
 sudo apt-get install -y cachefilesd
 echo "RUN=yes" | sudo tee /etc/default/cachefilesd
 
+# Colours on root SSH
+sudo sed -ie 's/#force_color_prompt=yes/force_color_prompt=yes/g' /root/.bashrc
+
 # /*=======================================
 # =            WELCOME MESSAGE            =
 # =======================================*/
