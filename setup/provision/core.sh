@@ -125,8 +125,10 @@ reboot_webserver_helper
 echo "Updating PHP limits."
 sudo sed -ie 's/ 2M/ 24M/g' /etc/php/7.2/apache2/php.ini
 sudo sed -ie 's/ 8M/ 24M/g' /etc/php/7.2/apache2/php.ini
+sudo sed -ie 's/ 128M/ 256M/g' /etc/php/7.2/apache2/php.ini
 sudo sed -ie 's/ 2M/ 24M/g' /etc/php/7.2/cli/php.ini
 sudo sed -ie 's/ 8M/ 24M/g' /etc/php/7.2/cli/php.ini
+sudo sed -ie 's/ 128M/ 256M/g' /etc/php/7.2/apache2/cli.ini
 reboot_webserver_helper
 
 # Disable PHP Zend OPcache
