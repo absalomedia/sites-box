@@ -9,7 +9,7 @@ Includes:
 * The latest [Phalcon 3.3.x](https://phalconphp.com/)
 * PostgreSQL [10](https://www.postgresql.org/)
 * FTP access using [VSFTP](https://security.appspot.com/vsftpd.html)
-* [Drush](http://www.drush.org/) (7.4 for client compatibility with Drupal 7)
+* [Drush](http://www.drush.org/) (Drush 8.1.7 for client compatibility with Drupal 7)
 * Ability to set multi core CPUs & increased VM memory
 * [Mailhog](https://github.com/mailhog/MailHog)
 * Microsoft Drivers for PHP for [SQL Server](https://github.com/Microsoft/msphpsql)
