@@ -258,11 +258,9 @@ $pkg='drush'
 if [ ! -f "/usr/local/src/drush" ]
 then
 sudo apt-get remove drush
-sudo git clone https://github.com/drush-ops/drush.git /usr/local/src/drush
-cd /usr/local/src/drush
-sudo git checkout 7.4.0  #or whatever version you want.
-sudo ln -s /usr/local/src/drush/drush /usr/bin/drush
-sudo composer install
+sudo composer global require consolidation/cgr
+sudo PATH="$(composer config home)/vendor/bin:$PATH"
+sudo cgr drush/drush:8
 fi
 reboot_webserver_helper
 
