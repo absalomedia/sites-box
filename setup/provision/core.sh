@@ -239,6 +239,11 @@ composer g require friendsofphp/php-cs-fixer
 # ==================================*/
 sudo apt-get -y install beanstalkd
 
+# /*==================================
+# =            HEROKU                =
+# ==================================*/
+sudo snap install --classic heroku
+
 # /*==============================
 # =            WP-CLI            =
 # ==============================*/

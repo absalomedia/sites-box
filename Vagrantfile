@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
     config.vm.hostname = CONF['vm_hostname']
     config.hostmanager.aliases = Array.new
 
-    config.vbguest.auto_update = false
+    config.vbguest.auto_update = true
     
     config.ssh.username = CONF['ssh_username'] || "vagrant"
     config.ssh.password = CONF['ssh_password'] || "vagrant"
