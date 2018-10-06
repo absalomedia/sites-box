@@ -393,4 +393,4 @@ sudo service vsftpd restart
 # Add in MeteorJS
     echo "Add Meteor & Reaction Commerce"
     sudo curl -k https://install.meteor.com/ | sh
-    npm install -g reaction-cli
+    yarn add global reaction-cli
