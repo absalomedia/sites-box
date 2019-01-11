@@ -15,6 +15,7 @@ Includes:
 - Microsoft Drivers for PHP for [SQL Server](https://github.com/Microsoft/msphpsql)
 - SSL enabled virtual hosts (self-signed based on config.yaml)
 - DNSMasq detection for Windows hosts
+- [RethinkDB](https://rethinkdb.com/) for realtime NOSQL
 - Latest edition of [MeteorJS](https://www.meteor.com) installed
 - Latest edition of [Reaction Commerce](https://reactioncommerce.com/) installed
 - Latest edition of [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) installed
