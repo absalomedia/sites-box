@@ -42,6 +42,10 @@ Vagrant.configure("2") do |config|
     config.vm.box = "scotch/box"
     config.vm.network "private_network", ip: CONF['vm_ip']
     config.vm.network :forwarded_port, guest: 3306, host: 3306, host_ip: "127.0.0.1"
+    config.vm.network :forwarded_port, guest: 3000, host: 3000
+    config.vm.network :forwarded_port, guest: 8080, host: 8080 # RethinkDB Web UI
+    config.vm.network :forwarded_port, guest: 28015, host: 28015 # Client driver
+    config.vm.network :forwarded_port, guest: 29015, host: 29015 # Intracluster traffic
     
     config.vm.synced_folder CONF['vm_code'], "/var/www/vhosts", :nfs => { :mount_options => ["dmode=777","fmode=666",'rw', 'vers=3', 'tcp'], :linux__nfs_options => ['rw','no_subtree_check','all_squash','async'] }
     config.vm.synced_folder CONF['vm_data'], "/var/lib/mysql", id: "mysql", owner: "mysql", group: "mysql", mount_options: ["dmode=777,fmode=666"]
