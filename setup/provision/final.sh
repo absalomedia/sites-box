@@ -44,6 +44,9 @@ sudo swapon /swapfile
 echo "/swapfile   none    swap    sw    0   0" | sudo tee -a /etc/fstab
 printf "vm.swappiness=10\nvm.vfs_cache_pressure=50" | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
+# Better process management
+sudo apt-get install -y htop
+
 # Allow caching of NFS file share
 sudo apt-get install -y cachefilesd
 echo "RUN=yes" | sudo tee /etc/default/cachefilesd
