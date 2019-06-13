@@ -1,6 +1,7 @@
 #!/bin/bash
 
 echo "Building VM - MySQL..."
+sudo apt purge -y php7.2*
 sudo apt purge -y php7.1*
 sudo apt purge -y php7.0*
 sudo apt purge -y php5.6*
