@@ -108,7 +108,7 @@ echo "Adding Phalcon to PHP"
 sudo apt-get -y install re2c
 sudo git clone --depth=1 -b 3.3.x  "git://github.com/phalcon/cphalcon.git"
 cd cphalcon/build && sudo ./install
-sudo echo "extension=phalcon.so" > /etc/php/7.2/mods-available/phalcon.ini
+sudo echo "extension=phalcon.so" > /etc/php/7.3/mods-available/phalcon.ini
 cd ../../ && sudo rm -rf cphalcon
 
 
@@ -124,16 +124,16 @@ echo 'short_open_tag = On' | sudo tee -a $PHP_USER_INI_PATH
 reboot_webserver_helper
 
 echo "Updating PHP limits."
-sudo sed -ie 's/ 2M/ 24M/g' /etc/php/7.2/apache2/php.ini
-sudo sed -ie 's/ 8M/ 24M/g' /etc/php/7.2/apache2/php.ini
-sudo sed -ie 's/ 128M/ 256M/g' /etc/php/7.2/apache2/php.ini
-sudo sed -ie 's/ 1000/ 10000/g' /etc/php/7.2/apache2/php.ini
-sudo sed -ie 's/ 2M/ 24M/g' /etc/php/7.2/cli/php.ini
-sudo sed -ie 's/ 8M/ 24M/g' /etc/php/7.2/cli/php.ini
-sudo sed -ie 's/ 128M/ 256M/g' /etc/php/7.2/cli/php.ini
-sudo sed -ie 's/ 1000/ 10000/g' /etc/php/7.2/cli/php.ini
-sudo sed -ie 's/ ; max_input_vars / max_input_vars /g' /etc/php/7.2/apache2/php.ini
-sudo sed -ie 's/ ; max_input_vars / max_input_vars /g' /etc/php/7.2/cli/php.ini
+sudo sed -ie 's/ 2M/ 24M/g' /etc/php/7.3/apache2/php.ini
+sudo sed -ie 's/ 8M/ 24M/g' /etc/php/7.3/apache2/php.ini
+sudo sed -ie 's/ 128M/ 256M/g' /etc/php/7.3/apache2/php.ini
+sudo sed -ie 's/ 1000/ 10000/g' /etc/php/7.3/apache2/php.ini
+sudo sed -ie 's/ 2M/ 24M/g' /etc/php/7.3/cli/php.ini
+sudo sed -ie 's/ 8M/ 24M/g' /etc/php/7.3/cli/php.ini
+sudo sed -ie 's/ 128M/ 256M/g' /etc/php/7.3/cli/php.ini
+sudo sed -ie 's/ 1000/ 10000/g' /etc/php/7.3/cli/php.ini
+sudo sed -ie 's/ ; max_input_vars / max_input_vars /g' /etc/php/7.3/apache2/php.ini
+sudo sed -ie 's/ ; max_input_vars / max_input_vars /g' /etc/php/7.3/cli/php.ini
 
 reboot_webserver_helper
 
@@ -141,7 +141,7 @@ reboot_webserver_helper
 echo 'opache.enable = 0' | sudo tee -a $PHP_USER_INI_PATH
 
 # Absolutely Force Zend OPcache off...
-sudo sed -i s,\;opcache.enable=0,opcache.enable=0,g /etc/php/7.2/apache2/php.ini
+sudo sed -i s,\;opcache.enable=0,opcache.enable=0,g /etc/php/7.3/apache2/php.ini
 reboot_webserver_helper
 
 # /*================================
@@ -236,7 +236,15 @@ sudo a2enmod php7.3
 sudo a2enmod http2
 
 composer g require psy/psysh:@stable
+# /*==============================
+# =            CS FIXER          =
+# ==============================*/
 composer g require friendsofphp/php-cs-fixer
+
+# /*==============================
+# =            WP-CLI            =
+# ==============================*/
+composer g require wp-cli/wp-cli-bundle
 
 # /*==================================
 # =            BEANSTALKD            =
@@ -248,9 +256,6 @@ sudo apt-get -y install beanstalkd
 # ==================================*/
 sudo snap install --classic heroku
 
-# /*==============================
-# =            WP-CLI            =
-# ==============================*/
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 sudo chmod +x wp-cli.phar
 sudo mv wp-cli.phar /usr/local/bin/wp
