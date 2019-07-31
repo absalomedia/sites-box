@@ -85,6 +85,7 @@ sudo apt-get -y install php7.3-memcache
 sudo apt-get -y install php7.3-memcached 
 sudo apt-get -y install php7.3-mysql
 sudo apt-get -y install php7.3-xml
+sudo apt-get -y install php7.3-zip
 
 # Enchant
 sudo apt-get -y install libenchant-dev
