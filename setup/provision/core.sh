@@ -62,6 +62,7 @@ sudo apt-get -y install php7.3-dev
 sudo apt-get -y install php7.3-bcmath
 sudo apt-get -y install php7.3-bz2
 sudo apt-get -y install php7.3-cgi
+sudo apt-get -y install php7.3-curl
 sudo apt-get -y install php7.3-cli
 sudo apt-get -y install php7.3-fpm
 sudo apt-get -y install php7.3-gd
@@ -115,7 +116,7 @@ cd ../../ && sudo rm -rf cphalcon
 # /*===========================================
 # =            CUSTOM PHP SETTINGS            =
 # ===========================================*/
-PHP_USER_INI_PATH=/etc/php/7.2/apache2/conf.d/user.ini
+PHP_USER_INI_PATH=/etc/php/7.3/apache2/conf.d/user.ini
 echo "Enabling debug"
 echo 'display_startup_errors = On' | sudo tee -a $PHP_USER_INI_PATH
 echo 'display_errors = On' | sudo tee -a $PHP_USER_INI_PATH
