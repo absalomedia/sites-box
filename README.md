@@ -16,6 +16,7 @@ Includes:
 - SSL enabled virtual hosts (self-signed based on config.yaml)
 - DNSMasq detection for Windows hosts
 - [RethinkDB](https://rethinkdb.com/) for realtime NOSQL
+- Latest edition of [Wordpress CLI](https://wp-cli.org/) installed
 - Latest edition of [MeteorJS](https://www.meteor.com) installed
 - Latest edition of [Reaction Commerce](https://reactioncommerce.com/) installed
 - Latest edition of [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) installed
