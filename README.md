@@ -5,6 +5,7 @@ An extension of the [Scotch Box](https://box.scotch.io/) Vagrant lamp stack conf
 Includes:
 
 - Built off latest Scotch Box (version 3.5)
+- Upgraded to Bionic Beaver (18.04 LTS)
 - PHP 7.3
 - The latest [Phalcon 3.3.x](https://phalconphp.com/)
 - PostgreSQL [10](https://www.postgresql.org/)
@@ -17,8 +18,6 @@ Includes:
 - DNSMasq detection for Windows hosts
 - [RethinkDB](https://rethinkdb.com/) for realtime NOSQL
 - Latest edition of [Wordpress CLI](https://wp-cli.org/) installed
-- Latest edition of [MeteorJS](https://www.meteor.com) installed
-- Latest edition of [Reaction Commerce](https://reactioncommerce.com/) installed
 - Latest edition of [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) installed
 - Apache virtual host directory now customised in config.yaml file
 - MySQL 5.7 custom configuration with utf8mb4 encoded database setup

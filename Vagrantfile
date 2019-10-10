@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
     config.vm.hostname = CONF['vm_hostname']
     config.hostmanager.aliases = Array.new
 
-    config.vbguest.auto_update = true
+    config.vbguest.auto_update = false
     
     config.ssh.username = CONF['ssh_username'] || "vagrant"
     config.ssh.password = CONF['ssh_password'] || "vagrant"
@@ -41,6 +41,7 @@ Vagrant.configure("2") do |config|
 
     config.vm.box = "scotch/box"
     config.vm.network "private_network", ip: CONF['vm_ip']
+    config.vm.network :forwarded_port, guest: 1022, host: 1022, host_ip: "127.0.0.1"
     config.vm.network :forwarded_port, guest: 3306, host: 3306, host_ip: "127.0.0.1"
     config.vm.network :forwarded_port, guest: 3000, host: 3000, host_ip: "127.0.0.1"
     config.vm.network :forwarded_port, guest: 5432, host: 5432, host_ip: "127.0.0.1" #PostGres
@@ -49,9 +50,10 @@ Vagrant.configure("2") do |config|
     config.vm.network :forwarded_port, guest: 8080, host: 8080,  host_ip: "127.0.0.1" # RethinkDB Web UI
     config.vm.network :forwarded_port, guest: 28015, host: 28015,  host_ip: "127.0.0.1" # Client driver
     config.vm.network :forwarded_port, guest: 29015, host: 29015, host_ip: "127.0.0.1" # Intracluster traffic
-    
-    config.vm.synced_folder CONF['vm_code'], "/var/www/vhosts", :nfs => { :mount_options => ["rw","async","fsc","nolock","vers=3","udp","rsize=32768","wsize=32768","hard","noatime","actimeo=2"]}
+
+    config.vm.synced_folder CONF['vm_code'], "/var/www/vhosts", mount_options: ["dmode=777,fmode=666"]
     config.vm.synced_folder CONF['vm_data'], "/var/lib/mysql", id: "mysql", owner: "mysql", group: "mysql", mount_options: ["dmode=777,fmode=666"]
+
 
     config.hostmanager.enabled = true
     if Vagrant::Util::Platform.windows? then

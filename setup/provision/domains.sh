@@ -61,6 +61,7 @@ for ((i=0; i < ${#DOMAINS_ARR[@]}; i++)); do
   ServerAdmin webmaster@localhost
   ServerName $DOMAIN
   ServerAlias *.$DOMAIN
+  Protocols h2 http/1.1
   DocumentRoot /var/www/vhosts/$DOMAIN/public
   ErrorLog /var/www/vhosts/$DOMAIN/logs/error.log
   CustomLog /var/www/vhosts/$DOMAIN/logs/access.log combined

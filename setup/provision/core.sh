@@ -10,7 +10,6 @@ reboot_webserver_helper() {
     echo 'Rebooting your webserver'
 }
 
-
 echo "Building VM..."
 sudo apt-get -qq update
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
@@ -177,7 +176,7 @@ echo "Setting up Microsoft SQL connector"
 # =            NMSSQL              =
 # =================================*/
 curl -s https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-sudo bash -c "curl -s https://packages.microsoft.com/config/ubuntu/16.04/prod.list > /etc/apt/sources.list.d/mssql-release.list"
+sudo bash -c "curl -s https://packages.microsoft.com/config/ubuntu/18.04/prod.list > /etc/apt/sources.list.d/mssql-release.list"
 sudo apt-get update
 sudo ACCEPT_EULA=Y apt-get -y install msodbcsql mssql-tools
 sudo apt-get -y install unixodbc-dev
@@ -199,7 +198,7 @@ reboot_webserver_helper
 # =            MONGODB            =
 # ===============================*/
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
-echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+echo "deb http://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
 sudo apt-get update
 sudo apt-get install -y mongodb-org
 
@@ -265,9 +264,6 @@ sudo mv wp-cli.phar /usr/local/bin/wp
 # /*=============================
 # =            DRUSH            =
 # =============================*/
-#wget -O drush.phar https://github.com/drush-ops/drush-launcher/releases/download/0.5.1/drush.phar
-#sudo chmod +x drush.phar
-#sudo mv drush.phar /usr/local/bin/drush
 
 #Better drush
 $pkg='drush'
@@ -407,11 +403,3 @@ sudo apt-get install vsftpd
 sudo wget https://gist.github.com/anonymous/1204611 /etc/vsftpd.conf
 sudo service vsftpd restart
 
-
-# /*===============================
-# =   METEOR & REACTIONCOMMERCE   =
-# ===============================*/
-# Add in MeteorJS
-    echo "Add Meteor & Reaction Commerce"
-    sudo curl -k https://install.meteor.com/ | sh
-    yarn add global reaction-cli
