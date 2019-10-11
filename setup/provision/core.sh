@@ -104,13 +104,10 @@ sudo apt-get -y install php7.3-imagick
 
 reboot_webserver_helper
 
-echo "Adding Phalcon to PHP"
+echo "Adding latest Phalcon to PHP"
 # Phalcon
-sudo apt-get -y install re2c
-sudo git clone --depth=1 -b 3.3.x  "git://github.com/phalcon/cphalcon.git"
-cd cphalcon/build && sudo ./install
-sudo echo "extension=phalcon.so" > /etc/php/7.3/mods-available/phalcon.ini
-cd ../../ && sudo rm -rf cphalcon
+sudo curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash
+sudo apt-get -y install php7.3-phalcon
 
 
 # /*===========================================
@@ -157,11 +154,6 @@ echo "Setting up PostGres 10"
 # /*=================================
 # =            PostreSQL            =
 # =================================*/
-sudo add-apt-repository 'deb http://apt.postgresql.org/pub/repos/apt/ zesty-pgdg main'
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
-  sudo apt-key add -
-sudo apt-get -qq update
-sudo apt-get -y install postgresql-10 postgresql-contrib
 echo "CREATE ROLE root WITH LOGIN ENCRYPTED PASSWORD 'root';" | sudo -i -u postgres psql
 sudo apt-get -y install php7.3-pgsql
 sudo systemctl stop postgresql
@@ -197,26 +189,6 @@ reboot_webserver_helper
 # /*===============================
 # =            MONGODB            =
 # ===============================*/
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
-echo "deb http://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
-sudo apt-get update
-sudo apt-get install -y mongodb-org
-
-sudo tee /lib/systemd/system/mongod.service  <<EOL
-[Unit]
-Description=High-performance, schema-free document-oriented database
-After=network.target
-Documentation=https://docs.mongodb.org/manual
-[Service]
-User=mongodb
-Group=mongodb
-ExecStart=/usr/bin/mongod --quiet --config /etc/mongod.conf
-[Install]
-WantedBy=multi-user.target
-EOL
-sudo systemctl enable mongod
-sudo service mongod start
-
 # Enable it for PHP
 sudo pecl install mongodb
 sudo apt-get install -y php7.3-mongodb
@@ -327,8 +299,6 @@ sudo apt-get -y install yarn
 # /*============================
 # =            RUBY            =
 # ============================*/
-sudo apt-get -y install ruby
-sudo apt-get -y install ruby-dev
 
 # Use RVM though to make life easy
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
@@ -357,15 +327,6 @@ sudo phpenmod memcache
 sudo phpenmod memcached
 reboot_webserver_helper
 
-
-# /*==============================
-# =            GOLANG            =
-# ==============================*/
-echo "Adding Go"
-sudo apt-get -qq update
-sudo apt-get -y dist-upgrade
-sudo apt-get -y install golang-go
-
 # /*===============================
 # =            MAILHOG            =
 # ===============================*/
@@ -392,7 +353,7 @@ sudo ln ~/go/bin/mhsendmail /usr/bin/mhsendmail
 sudo ln ~/go/bin/mhsendmail /usr/bin/sendmail
 sudo ln ~/go/bin/mhsendmail /usr/bin/mail
 
-echo 'sendmail_path = /usr/bin/mhsendmail' | sudo tee -a /etc/php/7.2/apache2/conf.d/user.ini
+echo 'sendmail_path = /usr/bin/mhsendmail' | sudo tee -a /etc/php/7.3/apache2/conf.d/user.ini
 reboot_webserver_helper
 
 # /*===============================
