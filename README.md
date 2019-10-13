@@ -1,13 +1,12 @@
-# sites-box 3.5
+# sites-box 4.0
 
 An extension of the [Scotch Box](https://box.scotch.io/) Vagrant lamp stack configured for hosting multiple sites in one box.
 
 Includes:
 
-- Built off latest Scotch Box (version 3.5)
-- Upgraded to Bionic Beaver (18.04 LTS)
+- Bionic Beaver (18.04 LTS) forked Vagrant box from Scotch Box 3.5
 - PHP 7.3
-- The latest [Phalcon 3.3.x](https://phalconphp.com/)
+- The latest [Phalcon](https://phalconphp.com/)
 - PostgreSQL [10](https://www.postgresql.org/)
 - FTP access using [VSFTP](https://security.appspot.com/vsftpd.html)
 - [Drush](http://www.drush.org/) (Drush 8.1.7 for client compatibility with Drupal 7)
@@ -21,11 +20,8 @@ Includes:
 - Latest edition of [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) installed
 - Apache virtual host directory now customised in config.yaml file
 - MySQL 5.7 custom configuration with utf8mb4 encoded database setup
-- MySQL data directory is now a synced folder to stop you losing data on when Vagrant image is destroyed
-- MySQL synced folder now customised in config.yaml file
+- MySQL databases backed up to host on box destruction
 - Simplified MySQL access - it's now seen as local instead of the standard SSH connection
-- Database backup & restore scripts
-- VirtualBox guest extensions updating inside Vagrant
 
 Setup requires:
 
