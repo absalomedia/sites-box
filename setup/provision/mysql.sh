@@ -9,12 +9,8 @@ sudo apt-get -qq update
 # =            MYSQL            =
 # =============================*/
 echo "Set up MySQL."
-#sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
-#sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
-
-#sudo rm -rf /var/lib/mysql
-#sudo apt-get install mysql-server
-#sudo mysqld  --initialize-insecure 
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
 sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo sed -ie '\$ainnodb_use_native_aio=0' /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo service mysql restart
@@ -33,4 +29,8 @@ if [ ! -f "/var/www/vhosts/dbrestore.sh" ]
 then
 sudo wget -P /var/www/vhosts https://raw.githubusercontent.com/absalomedia/sites-box/master/setup/provision/dbrestore.sh
 fi
-#sudo apt-mark hold mysql-server mysql-common mysql-server-5.7
+if [ ! -f "/etc/mysql/mysql.conf.d/grant-tables.cnf" ]
+then
+sudo wget -P /etc/mysql/mysql.conf.d/ https://raw.githubusercontent.com/absalomedia/sites-box/master/setup/provision/grant-tables.cnf
+fi
+sudo service mysql restart
