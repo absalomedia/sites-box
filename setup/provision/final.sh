@@ -68,7 +68,6 @@ echo "$WELCOME_MESSAGE" | sudo tee /etc/motd
 # /*===================================================
 # =            FINAL GOOD MEASURE, WHY NOT            =
 # ===================================================*/
-sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
 sudo service mysql restart
 sudo apt-get -qq update
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
