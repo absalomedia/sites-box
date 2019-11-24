@@ -30,8 +30,4 @@ if [ ! -f "/var/www/vhosts/dbrestore.sh" ]
 then
 sudo wget -P /var/www/vhosts https://raw.githubusercontent.com/absalomedia/sites-box/master/setup/provision/dbrestore.sh
 fi
-if [ ! -f "/etc/mysql/mysql.conf.d/grant-tables.cnf" ]
-then
-sudo wget -P /etc/mysql/mysql.conf.d/ https://raw.githubusercontent.com/absalomedia/sites-box/master/setup/provision/grant-tables.cnf
-fi
 sudo service mysql restart
