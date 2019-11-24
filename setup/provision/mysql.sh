@@ -16,6 +16,7 @@ sudo sed -ie '\$ainnodb_use_native_aio=0' /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo service mysql restart
 sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
 sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'debian-sys-maint'@'localhost' IDENTIFIED BY 'pC52BiU2Ghq3bnXY';"
+sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
 if [ ! -f "/etc/mysql/mysql.conf.d/utf8mb4.cnf" ]
 then
 sudo wget -P /etc/mysql/mysql.conf.d/ https://gist.githubusercontent.com/Xeoncross/2d0503cee10a6374c627f0faaed9ea3f/raw/755f53a68770a31b4b56c14e11e944e9facb10b5/utf8mb4.cnf

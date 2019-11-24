@@ -90,5 +90,6 @@ Vagrant.configure("2") do |config|
     config.trigger.before :destroy do |trigger|
       trigger.warn = "Dumping databases to CONF['vm_code']"
       trigger.run_remote = {inline: "cd /var/www/vhosts && bash dbbackup.sh"}
+      trigger.on_error = :continue
     end
 end
