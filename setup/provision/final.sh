@@ -46,13 +46,15 @@ printf "vm.swappiness=10\nvm.vfs_cache_pressure=50" | sudo tee -a /etc/sysctl.co
 
 # Better process management
 sudo apt-get install -y htop
+sudo apt-get install -y php7.3-dev
 
 # Allow caching of NFS file share
 sudo apt-get install -y cachefilesd
 echo "RUN=yes" | sudo tee /etc/default/cachefilesd
 
-# Colours on root SSH
+# Colours on SSH
 sudo sed -ie 's/#force_color_prompt=yes/force_color_prompt=yes/g' /root/.bashrc
+sudo sed -ie 's/#force_color_prompt=yes/force_color_prompt=yes/g' /home/vagrant/.bashrc
 
 # /*=======================================
 # =            WELCOME MESSAGE            =
