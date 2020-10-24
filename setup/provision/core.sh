@@ -43,7 +43,7 @@ echo "Updating PHP"
 sudo add-apt-repository -y ppa:ondrej/php # Super Latest Version (currently 7.2)
 sudo apt-get -qq update
 
-sudo apt-get install -y php7.3
+sudo apt-get install -y php7.4
 sudo apt-get -y install libapache2-mod-php
 
     # Add index.php to readable file types
@@ -54,66 +54,66 @@ sudo apt-get -y install libapache2-mod-php
 
 reboot_webserver_helper
 
-sudo apt-get -y install php7.3-common
-sudo apt-get -y install php7.3-dev
+sudo apt-get -y install php7.4-common
+sudo apt-get -y install php7.4-dev
 
 # Common Useful Stuff (some of these are probably already installed)
-sudo apt-get -y install php7.3-bcmath
-sudo apt-get -y install php7.3-bz2
-sudo apt-get -y install php7.3-cgi
-sudo apt-get -y install php7.3-curl
-sudo apt-get -y install php7.3-cli
-sudo apt-get -y install php7.3-fpm
-sudo apt-get -y install php7.3-gd
-sudo apt-get -y install php7.3-imap
-sudo apt-get -y install php7.3-intl
-sudo apt-get -y install php7.3-json
-sudo apt-get -y install php7.3-mbstring
-sudo apt-get -y install php7.3-odbc
+sudo apt-get -y install php7.4-bcmath
+sudo apt-get -y install php7.4-bz2
+sudo apt-get -y install php7.4-cgi
+sudo apt-get -y install php7.4-curl
+sudo apt-get -y install php7.4-cli
+sudo apt-get -y install php7.4-fpm
+sudo apt-get -y install php7.4-gd
+sudo apt-get -y install php7.4-imap
+sudo apt-get -y install php7.4-intl
+sudo apt-get -y install php7.4-json
+sudo apt-get -y install php7.4-mbstring
+sudo apt-get -y install php7.4-odbc
 sudo apt-get -y install php-pear
-sudo apt-get -y install php7.3-pspell
-sudo apt-get -y install php7.3-tidy
-sudo apt-get -y install php7.3-xmlrpc
-sudo apt-get -y install php7.3-zip
-sudo apt-get -y install php7.3-ssh2
-sudo apt-get -y install php7.3-msgpack
-sudo apt-get -y install php7.3-opcache
-sudo apt-get -y install php7.3-readline
-sudo apt-get -y install php7.3-igbinary
-sudo apt-get -y install php7.3-memcache 
-sudo apt-get -y install php7.3-memcached 
-sudo apt-get -y install php7.3-mysql
-sudo apt-get -y install php7.3-xml
-sudo apt-get -y install php7.3-zip
+sudo apt-get -y install php7.4-pspell
+sudo apt-get -y install php7.4-tidy
+sudo apt-get -y install php7.4-xmlrpc
+sudo apt-get -y install php7.4-zip
+sudo apt-get -y install php7.4-ssh2
+sudo apt-get -y install php7.4-msgpack
+sudo apt-get -y install php7.4-opcache
+sudo apt-get -y install php7.4-readline
+sudo apt-get -y install php7.4-igbinary
+sudo apt-get -y install php7.4-memcache 
+sudo apt-get -y install php7.4-memcached 
+sudo apt-get -y install php7.4-mysql
+sudo apt-get -y install php7.4-xml
+sudo apt-get -y install php7.4-zip
 
 # Enchant
 sudo apt-get -y install libenchant-dev
-sudo apt-get -y install php7.3-enchant
+sudo apt-get -y install php7.4-enchant
 
 # LDAP
 sudo apt-get -y install ldap-utils
-sudo apt-get -y install php7.3-ldap
+sudo apt-get -y install php7.4-ldap
 
 # CURL
 sudo apt-get -y install curl
-sudo apt-get -y install php7.3-curl
+sudo apt-get -y install php7.4-curl
 
 # IMAGE MAGIC
 sudo apt-get -y install imagemagick
-sudo apt-get -y install php7.3-imagick
+sudo apt-get -y install php7.4-imagick
 
 reboot_webserver_helper
 
 echo "Adding latest Phalcon to PHP"
 # Phalcon
 sudo curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash
-sudo apt-get -y install php7.3-phalcon
+sudo apt-get -y install php7.4-phalcon
 
 
 # /*===========================================
 # =            CUSTOM PHP SETTINGS            =
 # ===========================================*/
-PHP_USER_INI_PATH=/etc/php/7.3/apache2/conf.d/user.ini
+PHP_USER_INI_PATH=/etc/php/7.4/apache2/conf.d/user.ini
 echo "Enabling debug"
 echo 'display_startup_errors = On' | sudo tee -a $PHP_USER_INI_PATH
 echo 'display_errors = On' | sudo tee -a $PHP_USER_INI_PATH
@@ -122,16 +122,16 @@ echo 'short_open_tag = On' | sudo tee -a $PHP_USER_INI_PATH
 reboot_webserver_helper
 
 echo "Updating PHP limits."
-sudo sed -ie 's/ 2M/ 24M/g' /etc/php/7.3/apache2/php.ini
-sudo sed -ie 's/ 8M/ 24M/g' /etc/php/7.3/apache2/php.ini
-sudo sed -ie 's/ 128M/ 256M/g' /etc/php/7.3/apache2/php.ini
-sudo sed -ie 's/ 1000/ 10000/g' /etc/php/7.3/apache2/php.ini
-sudo sed -ie 's/ 2M/ 24M/g' /etc/php/7.3/cli/php.ini
-sudo sed -ie 's/ 8M/ 24M/g' /etc/php/7.3/cli/php.ini
-sudo sed -ie 's/ 128M/ 256M/g' /etc/php/7.3/cli/php.ini
-sudo sed -ie 's/ 1000/ 10000/g' /etc/php/7.3/cli/php.ini
-sudo sed -ie 's/ ; max_input_vars / max_input_vars /g' /etc/php/7.3/apache2/php.ini
-sudo sed -ie 's/ ; max_input_vars / max_input_vars /g' /etc/php/7.3/cli/php.ini
+sudo sed -ie 's/ 2M/ 24M/g' /etc/php/7.4/apache2/php.ini
+sudo sed -ie 's/ 8M/ 24M/g' /etc/php/7.4/apache2/php.ini
+sudo sed -ie 's/ 128M/ 256M/g' /etc/php/7.4/apache2/php.ini
+sudo sed -ie 's/ 1000/ 10000/g' /etc/php/7.4/apache2/php.ini
+sudo sed -ie 's/ 2M/ 24M/g' /etc/php/7.4/cli/php.ini
+sudo sed -ie 's/ 8M/ 24M/g' /etc/php/7.4/cli/php.ini
+sudo sed -ie 's/ 128M/ 256M/g' /etc/php/7.4/cli/php.ini
+sudo sed -ie 's/ 1000/ 10000/g' /etc/php/7.4/cli/php.ini
+sudo sed -ie 's/ ; max_input_vars / max_input_vars /g' /etc/php/7.4/apache2/php.ini
+sudo sed -ie 's/ ; max_input_vars / max_input_vars /g' /etc/php/7.4/cli/php.ini
 
 reboot_webserver_helper
 
@@ -139,7 +139,7 @@ reboot_webserver_helper
 echo 'opache.enable = 0' | sudo tee -a $PHP_USER_INI_PATH
 
 # Absolutely Force Zend OPcache off...
-sudo sed -i s,\;opcache.enable=0,opcache.enable=0,g /etc/php/7.3/apache2/php.ini
+sudo sed -i s,\;opcache.enable=0,opcache.enable=0,g /etc/php/7.4/apache2/php.ini
 reboot_webserver_helper
 
 # /*================================
@@ -155,7 +155,7 @@ echo "Setting up PostGres 10"
 # =            PostreSQL            =
 # =================================*/
 echo "CREATE ROLE root WITH LOGIN ENCRYPTED PASSWORD 'root';" | sudo -i -u postgres psql
-sudo apt-get -y install php7.3-pgsql
+sudo apt-get -y install php7.4-pgsql
 sudo systemctl stop postgresql
 sudo pg_dropcluster 10 main --stop
 sudo pg_upgradecluster -m upgrade 9.5 main
@@ -175,15 +175,15 @@ sudo apt-get -y install unixodbc-dev
 sudo apt-get -y install gcc g++ make autoconf libc-dev pkg-config
 sudo pecl install sqlsrv
 sudo pecl install pdo_sqlsrv
-sudo bash -c "echo extension=sqlsrv.so > /etc/php7.3/conf.d/sqlsrv.ini"
-sudo bash -c "echo extension=pdo_sqlsrv.so > /etc/php7.3/conf.d/pdo_sqlsrv.ini"
+sudo bash -c "echo extension=sqlsrv.so > /etc/php7.4/conf.d/sqlsrv.ini"
+sudo bash -c "echo extension=pdo_sqlsrv.so > /etc/php7.4/conf.d/pdo_sqlsrv.ini"
 reboot_webserver_helper
 
 # /*==============================
 # =            SQLITE            =
 # ===============================*/
 sudo apt-get -y install sqlite
-sudo apt-get -y install php7.3-sqlite3
+sudo apt-get -y install php7.4-sqlite3
 reboot_webserver_helper
 
 # /*===============================
@@ -191,7 +191,7 @@ reboot_webserver_helper
 # ===============================*/
 # Enable it for PHP
 sudo pecl install mongodb
-sudo apt-get install -y php7.3-mongodb
+sudo apt-get install -y php7.4-mongodb
 reboot_webserver_helper
 
 # /*================================
@@ -205,7 +205,7 @@ rm composer-setup.php
 sudo mv composer.phar /usr/local/bin/composer
 sudo chmod 755 /usr/local/bin/composer
 
-sudo a2enmod php7.3
+sudo a2enmod php7.4
 sudo a2enmod http2
 
 composer g require psy/psysh:@stable
@@ -314,14 +314,14 @@ gem clean
 # =            REDIS            =
 # =============================*/
 sudo apt-get -y install redis-server
-sudo apt-get -y install php7.3-redis
+sudo apt-get -y install php7.4-redis
 reboot_webserver_helper
 
 # /*=================================
 # =            MEMCACHED            =
 # =================================*/
 sudo apt-get -y install memcached
-sudo apt-get -y install php7.3-memcached
+sudo apt-get -y install php7.4-memcached
 sudo phpenmod memcache
 sudo phpenmod memcached
 reboot_webserver_helper
@@ -352,7 +352,7 @@ sudo ln ~/go/bin/mhsendmail /usr/bin/mhsendmail
 sudo ln ~/go/bin/mhsendmail /usr/bin/sendmail
 sudo ln ~/go/bin/mhsendmail /usr/bin/mail
 
-echo 'sendmail_path = /usr/bin/mhsendmail' | sudo tee -a /etc/php/7.3/apache2/conf.d/user.ini
+echo 'sendmail_path = /usr/bin/mhsendmail' | sudo tee -a /etc/php/7.4/apache2/conf.d/user.ini
 reboot_webserver_helper
 
 # /*===============================

@@ -5,7 +5,7 @@ An extension of the [Scotch Box](https://box.scotch.io/) Vagrant lamp stack conf
 Includes:
 
 - Bionic Beaver (18.04 LTS) forked Vagrant box from Scotch Box 3.5
-- PHP 7.3
+- PHP 7.4
 - The latest [Phalcon](https://phalconphp.com/)
 - PostgreSQL [10](https://www.postgresql.org/)
 - FTP access using [VSFTP](https://security.appspot.com/vsftpd.html)

@@ -46,7 +46,7 @@ printf "vm.swappiness=10\nvm.vfs_cache_pressure=50" | sudo tee -a /etc/sysctl.co
 
 # Better process management
 sudo apt-get install -y htop
-sudo apt-get install -y php7.3-dev
+sudo apt-get install -y php7.4-dev
 
 # Allow caching of NFS file share
 sudo apt-get install -y cachefilesd
