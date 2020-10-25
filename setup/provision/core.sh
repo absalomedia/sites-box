@@ -82,6 +82,7 @@ sudo apt-get -y install php7.4-readline
 sudo apt-get -y install php7.4-igbinary
 sudo apt-get -y install php7.4-memcache 
 sudo apt-get -y install php7.4-memcached 
+sudo apt-get -y install php7.4-psr
 sudo apt-get -y install php7.4-mysql
 sudo apt-get -y install php7.4-xml
 sudo apt-get -y install php7.4-zip
