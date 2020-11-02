@@ -1,4 +1,4 @@
-# sites-box 4.0
+# sites-box 5.0
 
 An extension of the [Scotch Box](https://box.scotch.io/) Vagrant lamp stack configured for hosting multiple sites in one box.
 
