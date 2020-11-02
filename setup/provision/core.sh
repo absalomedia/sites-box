@@ -23,9 +23,6 @@ sudo apt-get -y install dnsmasq
 sudo apt-get -y install locate
 sudo apt-get -y install git
 
-# Weird Vagrant issue fix
-sudo apt-get install -y ifupdown
-
 echo "Updating Apache..."
 sudo add-apt-repository -y ppa:ondrej/apache2 # Super Latest Version
 sudo apt-get -qq update
