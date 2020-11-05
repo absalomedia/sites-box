@@ -4,7 +4,7 @@ An extension of the [Scotch Box](https://box.scotch.io/) Vagrant lamp stack conf
 
 Includes:
 
-- Focal Fossa (20.04 LTS) forked Vagrant box from Scotch Box 3.5
+- Focal Fossa (20.04 LTS) using Bento
 - PHP 7.4
 - The latest [Phalcon](https://phalconphp.com/)
 - PostgreSQL [10](https://www.postgresql.org/)
@@ -19,7 +19,7 @@ Includes:
 - Latest edition of [Wordpress CLI](https://wp-cli.org/) installed
 - Latest edition of [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) installed
 - Apache virtual host directory now customised in config.yaml file
-- MySQL 5.7 custom configuration with utf8mb4 encoded database setup
+- MariaDB 10.5 custom configuration with utf8mb4 encoded database setup
 - MySQL databases backed up to host on box destruction
 - Simplified MySQL access - it's now seen as local instead of the standard SSH connection
 

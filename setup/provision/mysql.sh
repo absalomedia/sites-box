@@ -3,16 +3,19 @@
 echo "Building VM - MySQL..."
 sudo apt-key del 72ECF46A56B4AD39C907BBB71646B01B86E50310
 sudo wget -qO - https://raw.githubusercontent.com/yarnpkg/releases/gh-pages/debian/pubkey.gpg | sudo apt-key add -
+sudo apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
+sudo add-apt-repository 'deb [arch=amd64] http://mariadb.mirror.globo.tech/repo/10.5/ubuntu focal main'
 sudo apt-get -qq update
 
 # /*=============================
 # =            MYSQL            =
 # =============================*/
 echo "Set up MySQL."
+sudo apt install mariadb-server mariadb-client -y 
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
-sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf
-sudo sed -ie '\$ainnodb_use_native_aio=0' /etc/mysql/mysql.conf.d/mysqld.cnf
+sudo sed -ie 's/ 127.0.0.1/ 0.0.0.0/g' /etc/mysql/mariadb.conf.d/50-server.cnf
+sudo sed -ie '\$ainnodb_use_native_aio=0' /etc/mysql/maridb.conf.d/50-server.cnf
 sudo service mysql restart
 sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
 sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'debian-sys-maint'@'localhost' IDENTIFIED BY 'pC52BiU2Ghq3bnXY';"

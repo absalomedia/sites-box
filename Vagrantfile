@@ -39,7 +39,7 @@ Vagrant.configure("2") do |config|
       vb.customize ['modifyvm', :id, '--ioapic', 'on']
     end
 
-    config.vm.box = "abm/sites"
+    config.vm.box = "bento/ubuntu-20.04"
     config.vm.network "private_network", ip: CONF['vm_ip']
     config.vm.network :forwarded_port, guest: 3306, host: 3306, host_ip: "127.0.0.1"
     config.vm.network :forwarded_port, guest: 3000, host: 3000, host_ip: "127.0.0.1"
