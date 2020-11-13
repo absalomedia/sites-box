@@ -1,2 +1,5 @@
 [mysqld]
 skip-grant-tables
+
+[mysql_install_db]
+auth_root_authentication_method=normal
